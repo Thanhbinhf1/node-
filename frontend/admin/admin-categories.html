@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Danh mục | Admin F.Style</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Bê nguyên bộ biến màu và CSS nền tảng từ trang Product sang */
+      :root {
+        --bg-main: #0f172a;
+        --bg-sidebar: #111827;
+        --bg-card: #1e293b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --shadow-soft:
+          0 10px 25px -5px rgba(0, 0, 0, 0.5),
+          0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* Sidebar & Header */
+      .sidebar {
+        width: 260px;
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition);
+        z-index: 100;
+      }
+      .sidebar-logo {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        font-size: 22px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+        white-space: nowrap;
+      }
+      .sidebar-logo span {
+        color: var(--primary);
+      }
+      .sidebar-menu {
+        padding: 20px 15px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .sidebar-menu li {
+        margin-bottom: 8px;
+      }
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .sidebar-menu a i {
+        width: 24px;
+        font-size: 18px;
+        margin-right: 10px;
+        text-align: center;
+      }
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .sidebar-menu a.active {
+        border-left: 4px solid var(--primary);
+        padding-left: 11px;
+      }
+
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .header {
+        height: 70px;
+        background-color: var(--bg-main);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+      }
+      .header-left,
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .search-bar {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+      }
+      .search-bar i {
+        color: var(--text-muted);
+        margin-right: 10px;
+      }
+      .search-bar input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--text-main);
+        width: 100%;
+        font-family: "Inter";
+      }
+      .icon-btn {
+        position: relative;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .badge {
+        position: absolute;
+        top: -5px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 10px;
+        border: 2px solid var(--bg-main);
+      }
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+      }
+
+      .content {
+        padding: 30px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      /* Bảng Data Table */
+      .card-container {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-soft);
+        padding: 25px;
+      }
+      .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .modern-table th {
+        text-align: left;
+        padding: 15px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 13px;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .modern-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      .modern-table tr:hover td {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+
+      /* Form Components */
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .form-control {
+        width: 100%;
+        background: var(--bg-main);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-family: "Inter";
+        outline: none;
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+      }
+      textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Upload Hình Ảnh */
+      .upload-box {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .upload-box:hover {
+        border-color: var(--primary);
+        background: rgba(59, 130, 246, 0.05);
+      }
+      .image-preview-area {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .img-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid var(--border-color);
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+      }
+      #category-form-view {
+        display: none;
+      } /* Ẩn form thêm mới mặc định */
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <i
+          class="fa-solid fa-cube"
+          style="color: var(--primary); margin-right: 10px"
+        ></i>
+        <span class="logo-text">F.Style<span>Admin</span></span>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="./admin.html"
+            ><i class="fa-solid fa-house"></i> <span>Tổng quan</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-products.html"
+            ><i class="fa-solid fa-box-open"></i> <span>Sản phẩm</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-categories.html" class="active"
+            ><i class="fa-solid fa-layer-group"></i> <span>Danh mục</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-orders.html"
+            ><i class="fa-solid fa-cart-shopping"></i> <span>Đơn hàng</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-users.html"
+            ><i class="fa-solid fa-users"></i> <span>Khách hàng</span></a
+          >
+        </li>
+        <li style="margin-top: 30px">
+          <a href="#"
+            ><i class="fa-solid fa-gear"></i> <span>Cài đặt hệ thống</span></a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="header">
+        <div class="header-left">
+          <button class="toggle-btn" id="toggle-sidebar">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Tìm kiếm danh mục..." />
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="icon-btn">
+            <i class="fa-regular fa-bell"></i>
+            <span class="badge">2</span>
+          </div>
+          <div class="admin-profile">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+              class="admin-avatar"
+              alt="Admin"
+            />
+            <div class="admin-info">
+              <h4>Admin Phát</h4>
+              <p>Quản trị viên</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div id="category-list-view">
+          <div class="header-actions">
+            <div>
+              <h1 class="page-title" style="margin: 0">Quản lý Danh mục</h1>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 14px;
+                  margin-top: 5px;
+                "
+              >
+                Sắp xếp và quản lý phân tầng sản phẩm của cửa hàng.
+              </p>
+            </div>
+            <button class="btn-primary" id="btn-show-add">
+              <i class="fa-solid fa-plus"></i> Thêm Danh mục
+            </button>
+          </div>
+
+          <div class="card-container">
+            <div class="card-header" style="margin-bottom: 20px">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tìm kiếm danh mục..."
+                style="width: 300px"
+              />
+            </div>
+            <table class="modern-table">
+              <thead>
+                <tr>
+                  <th>Hình ảnh & Tên</th>
+                  <th>Đường dẫn (Slug)</th>
+                  <th>Danh mục cha</th>
+                  <th>Số sản phẩm</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="category-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="category-form-view">
+          <div class="header-actions">
+            <div>
+              <h1 class="page-title" style="margin: 0" id="form-title">
+                Thêm Danh mục mới
+              </h1>
+              <button
+                class="btn-outline"
+                id="btn-back-list"
+                style="
+                  border: none;
+                  padding: 0;
+                  margin-top: 5px;
+                  color: var(--text-muted);
+                "
+              >
+                <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
+              </button>
+            </div>
+            <button class="btn-primary" id="btn-save-category">
+              <i class="fa-solid fa-floppy-disk"></i> Lưu Danh mục
+            </button>
+          </div>
+
+          <div class="dashboard-grid">
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Thông tin chung
+                </h2>
+                <div class="form-group">
+                  <label>Tên danh mục *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="cat-name"
+                    placeholder="VD: Ghế văn phòng công thái học"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Đường dẫn tĩnh (Slug URL) *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="cat-slug"
+                    placeholder="VD: ghe-van-phong-cong-thai-hoc"
+                    style="background: rgba(15, 23, 42, 0.5)"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Mô tả danh mục</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="Viết một đoạn mô tả ngắn giúp tối ưu SEO cho danh mục này..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Hình ảnh đại diện
+                </h2>
+                <div class="upload-box" id="upload-zone">
+                  <i
+                    class="fa-regular fa-image"
+                    style="font-size: 24px; margin-bottom: 10px"
+                  ></i>
+                  <h4 style="margin-bottom: 5px">Nhấp để tải ảnh lên</h4>
+                  <p style="font-size: 13px; color: var(--text-muted)">
+                    Sử dụng làm banner hoặc thumbnail (Khuyên dùng: 1200x400px)
+                  </p>
+                  <input type="file" id="file-input" hidden accept="image/*" />
+                </div>
+                <div class="image-preview-area" id="preview-container"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Phân cấp danh mục
+                </h2>
+                <div class="form-group">
+                  <label>Danh mục cha</label>
+                  <select class="form-control">
+                    <option value="none">
+                      --- Không có (Danh mục gốc) ---
+                    </option>
+                    <option value="workspace">
+                      Không gian làm việc (Workspace)
+                    </option>
+                    <option value="kitchen">Nhà bếp & Phòng ăn</option>
+                    <option value="living-room">Phòng khách</option>
+                  </select>
+                  <p
+                    style="
+                      font-size: 12px;
+                      color: var(--text-muted);
+                      margin-top: 8px;
+                    "
+                  >
+                    Để "Không có" nếu đây là danh mục cấp 1 lớn nhất.
+                  </p>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Trạng thái hiển thị
+                </h2>
+                <div class="form-group">
+                  <label>Trạng thái</label>
+                  <select
+                    class="form-control"
+                    style="color: #10b981; font-weight: bold"
+                  >
+                    <option>Hoạt động (Hiển thị)</option>
+                    <option style="color: #f59e0b">Ẩn danh mục</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/admin-categories-client.js"></script>
+  </body>
+</html>

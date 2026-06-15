@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập / Đăng ký | F.Style Store 2026</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #ee4d2d;
+        --primary-light: #fff0ed;
+        --text-main: #222222;
+        --text-muted: #757575;
+        --white: #ffffff;
+        --border: #e8e8e8;
+        --radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url("https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600");
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+
+      /* Lớp phủ làm tối hình nền */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+      }
+
+      /* Khung Form ở giữa */
+      .auth-container {
+        position: relative;
+        z-index: 2;
+        background: var(--white);
+        width: 100%;
+        max-width: 450px;
+        border-radius: var(--radius);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        margin: 20px;
+      }
+
+      .auth-header {
+        padding: 30px 30px 10px;
+        text-align: center;
+      }
+      .logo {
+        font-size: 28px;
+        font-weight: 900;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none;
+        margin-bottom: 20px;
+      }
+      .auth-title {
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      /* Tabs chuyển đổi */
+      .auth-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 25px;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 15px 0;
+        text-align: center;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: 0.2s;
+        position: relative;
+      }
+      .tab-btn.active {
+        color: var(--primary);
+      }
+      .tab-btn.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+      }
+
+      .auth-body {
+        padding: 0 30px 30px;
+      }
+
+      /* Form Inputs */
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        font-family: "Inter";
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+      }
+
+      .icon-eye {
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        color: var(--text-muted);
+        cursor: pointer;
+      }
+
+      /* Hàng Ghi nhớ / Quên MK */
+      .flex-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        margin-bottom: 25px;
+      }
+      .remember-me {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        color: var(--text-muted);
+      }
+      .forgot-pw {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      /* Nút Submit */
+      .btn-submit {
+        width: 100%;
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 14px;
+        border-radius: var(--radius);
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        text-transform: uppercase;
+      }
+      .btn-submit:hover {
+        background: #d73d1e;
+      }
+
+      /* Ẩn hiện View */
+      #register-view {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+
+    <div class="auth-container">
+      <div class="auth-header">
+        <a href="index.html" class="logo"
+          ><i class="fa-solid fa-cube"></i> F.Style</a
+        >
+        <div class="auth-tabs">
+          <div class="tab-btn active" id="tab-login">ĐĂNG NHẬP</div>
+          <div class="tab-btn" id="tab-register">ĐĂNG KÝ</div>
+        </div>
+      </div>
+
+      <div class="auth-body">
+        <form id="login-view">
+          <div class="form-group">
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              placeholder="Email của bạn"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control"
+              id="login-pw"
+              placeholder="Mật khẩu"
+            />
+            <i
+              class="fa-solid fa-eye-slash icon-eye"
+              onclick="window.togglePassword('login-pw', this)"
+            ></i>
+          </div>
+
+          <div class="flex-row">
+            <label class="remember-me">
+              <input type="checkbox" style="accent-color: var(--primary)" /> Ghi
+              nhớ đăng nhập
+            </label>
+            <a href="#" class="forgot-pw">Quên mật khẩu?</a>
+          </div>
+
+          <button type="button" class="btn-submit" id="btn-do-login">
+            ĐĂNG NHẬP
+          </button>
+        </form>
+
+        <form id="register-view">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="reg-name"
+              placeholder="Họ và tên"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              class="form-control"
+              id="reg-email"
+              placeholder="Email"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              class="form-control"
+              id="reg-phone"
+              placeholder="Số điện thoại"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control"
+              id="reg-pw"
+              placeholder="Mật khẩu"
+            />
+            <i
+              class="fa-solid fa-eye-slash icon-eye"
+              onclick="window.togglePassword('reg-pw', this)"
+            ></i>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control"
+              id="reg-pw-confirm"
+              placeholder="Xác nhận mật khẩu"
+            />
+          </div>
+
+          <button
+            type="button"
+            class="btn-submit"
+            id="btn-do-register"
+            style="margin-top: 10px"
+          >
+            TẠO TÀI KHOẢN
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="./../js/auth-client.js"></script>
+  </body>
+</html>

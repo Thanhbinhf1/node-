@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products Management | Admin F.Style</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ================= 1. BIẾN MÀU SẮC GỐC ================= */
+      :root {
+        --bg-main: #0f172a;
+        --bg-sidebar: #111827;
+        --bg-card: #1e293b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --shadow-soft:
+          0 10px 25px -5px rgba(0, 0, 0, 0.5),
+          0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* ================= 2. SIDEBAR & HEADER GỐC ================= */
+      .sidebar {
+        width: 260px;
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition);
+        z-index: 100;
+      }
+      .sidebar.collapsed {
+        width: 80px;
+      }
+      .sidebar-logo {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        font-size: 22px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+        white-space: nowrap;
+      }
+      .sidebar-logo span {
+        color: var(--primary);
+      }
+      .sidebar.collapsed .sidebar-logo .logo-text {
+        display: none;
+      }
+
+      .sidebar-menu {
+        padding: 20px 15px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .sidebar-menu li {
+        margin-bottom: 8px;
+      }
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .sidebar-menu a i {
+        width: 24px;
+        font-size: 18px;
+        margin-right: 10px;
+        text-align: center;
+      }
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .sidebar-menu a.active {
+        border-left: 4px solid var(--primary);
+        padding-left: 11px;
+      }
+
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .header {
+        height: 70px;
+        background-color: var(--bg-main);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+      }
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .search-bar {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+      }
+      .search-bar i {
+        color: var(--text-muted);
+        margin-right: 10px;
+      }
+      .search-bar input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--text-main);
+        width: 100%;
+        font-family: "Inter";
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+      .icon-btn {
+        position: relative;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .badge {
+        position: absolute;
+        top: -5px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 10px;
+        border: 2px solid var(--bg-main);
+      }
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+      }
+      .admin-info h4 {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .admin-info p {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .content {
+        padding: 30px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      /* Bảng Data Table gốc */
+      .card-container {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-soft);
+        padding: 25px;
+      }
+      .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .modern-table th {
+        text-align: left;
+        padding: 15px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 13px;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .modern-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      .modern-table tr:hover td {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+
+      /* ================= 3. CSS RIÊNG CHO TRANG SẢN PHẨM ================= */
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .btn-outline:hover {
+        background: var(--border-color);
+      }
+
+      /* Form Inputs */
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+      .form-control {
+        width: 100%;
+        background: var(--bg-main);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-family: "Inter";
+        outline: none;
+        transition: var(--transition);
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      }
+      textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Upload Hình Ảnh */
+      .upload-box {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        background: rgba(15, 23, 42, 0.5);
+      }
+      .upload-box:hover {
+        border-color: var(--primary);
+        background: rgba(59, 130, 246, 0.05);
+      }
+      .upload-box i {
+        font-size: 40px;
+        color: var(--text-muted);
+        margin-bottom: 15px;
+      }
+      .image-preview-area {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+      .img-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid var(--border-color);
+      }
+
+      /* Bảng Biến Thể (Variants) */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+      }
+      .variant-row {
+        display: grid;
+        grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
+        gap: 15px;
+        align-items: end;
+        margin-bottom: 15px;
+        background: var(--bg-main);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+      .btn-remove-variant {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        height: 43px;
+      }
+      .btn-remove-variant:hover {
+        background: #ef4444;
+        color: #fff;
+      }
+
+      /* Ẩn form thêm mới mặc định */
+      #product-form-view {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <i
+          class="fa-solid fa-cube"
+          style="color: var(--primary); margin-right: 10px"
+        ></i>
+        <span class="logo-text">F.Style<span>Admin</span></span>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="./admin.html"
+            ><i class="fa-solid fa-house"></i> <span>Dashboard</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-products.html" class="active"
+            ><i class="fa-solid fa-box-open"></i> <span>Products</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-categories.html"
+            ><i class="fa-solid fa-layer-group"></i> <span>Categories</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-orders.html"
+            ><i class="fa-solid fa-cart-shopping"></i> <span>Orders</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-users.html"
+            ><i class="fa-solid fa-users"></i> <span>Users</span></a
+          >
+        </li>
+        <li style="margin-top: 30px">
+          <a href="#"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="header">
+        <div class="header-left">
+          <button class="toggle-btn" id="toggle-sidebar">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search products, orders..." />
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="icon-btn">
+            <i class="fa-regular fa-bell"></i>
+            <span class="badge">4</span>
+          </div>
+          <div class="admin-profile">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+              class="admin-avatar"
+              alt="Admin"
+            />
+            <div class="admin-info">
+              <h4>Admin Phát</h4>
+              <p>Super Admin</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div id="product-list-view">
+          <div class="header-actions">
+            <div>
+              <h1 class="page-title" style="margin: 0">Products</h1>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 14px;
+                  margin-top: 5px;
+                "
+              >
+                Manage your catalog, inventory, and variants.
+              </p>
+            </div>
+            <button class="btn-primary" id="btn-show-add">
+              <i class="fa-solid fa-plus"></i> Add Product
+            </button>
+          </div>
+
+          <div class="card-container">
+            <div
+              class="card-header"
+              style="margin-bottom: 20px; display: flex; gap: 15px"
+            >
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search by name, SKU..."
+                style="width: 300px"
+              />
+              <select class="form-control" style="width: 150px">
+                <option>All Categories</option>
+                <option>Workspace</option>
+                <option>Kitchen</option>
+              </select>
+            </div>
+            <table class="modern-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-product-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="product-form-view">
+          <div class="header-actions">
+            <div>
+              <h1 class="page-title" style="margin: 0">Add New Product</h1>
+              <button
+                class="btn-outline"
+                id="btn-back-list"
+                style="
+                  border: none;
+                  padding: 0;
+                  margin-top: 5px;
+                  color: var(--text-muted);
+                "
+              >
+                <i class="fa-solid fa-arrow-left"></i> Back to list
+              </button>
+            </div>
+            <div style="display: flex; gap: 15px">
+              <button class="btn-outline">Save Draft</button>
+              <button class="btn-primary" id="btn-save-product">
+                Publish Product
+              </button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  General Information
+                </h2>
+                <div class="form-group">
+                  <label>Product Name *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="form-prod-name"
+                    placeholder="e.g. Ergonomic Office Chair"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Short Description</label>
+                  <textarea
+                    class="form-control"
+                    placeholder="Brief summary for catalog view..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Media Gallery
+                </h2>
+                <div class="upload-box" id="upload-zone">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                  <h4 style="margin-bottom: 5px">
+                    Drag & Drop your images here
+                  </h4>
+                  <p style="font-size: 13px; color: var(--text-muted)">
+                    or click to browse (PNG, JPG up to 5MB)
+                  </p>
+                  <input
+                    type="file"
+                    id="file-input"
+                    multiple
+                    hidden
+                    accept="image/*"
+                  />
+                </div>
+                <div class="image-preview-area" id="preview-container"></div>
+              </div>
+
+              <div class="card-container">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                  "
+                >
+                  <h2 class="card-title">Variants (Color, Size)</h2>
+                  <button
+                    class="btn-outline"
+                    style="padding: 6px 12px; font-size: 13px"
+                    id="btn-add-variant"
+                  >
+                    <i class="fa-solid fa-plus"></i> Add Option
+                  </button>
+                </div>
+                <div id="variants-container"></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Organization
+                </h2>
+                <div class="form-group">
+                  <label>Category</label>
+                  <select class="form-control" id="form-prod-category">
+                    <option>Workspace</option>
+                    <option>Kitchen & Dining</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Pricing & Inventory
+                </h2>
+                <div class="form-group">
+                  <label>Base Price (VNĐ)</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="form-prod-price"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>SKU</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="form-prod-sku"
+                    placeholder="e.g. FS-CHAIR-001"
+                  />
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">Status</h2>
+                <div class="form-group">
+                  <select
+                    class="form-control"
+                    id="form-prod-status"
+                    style="color: #10b981; font-weight: bold"
+                  >
+                    <option>Active</option>
+                    <option style="color: #f59e0b">Hidden (Draft)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/admin-products-client.js"></script>
+  </body>
+</html>

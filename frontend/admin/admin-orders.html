@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Đơn hàng | Admin F.Style</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ================= BIẾN MÀU SẮC GỐC ================= */
+      :root {
+        --bg-main: #0f172a;
+        --bg-sidebar: #111827;
+        --bg-card: #1e293b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --shadow-soft:
+          0 10px 25px -5px rgba(0, 0, 0, 0.5),
+          0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+
+      /* Sidebar & Header */
+      .sidebar {
+        width: 260px;
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        transition: var(--transition);
+        z-index: 100;
+      }
+      .sidebar-logo {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        font-size: 22px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+        white-space: nowrap;
+      }
+      .sidebar-logo span {
+        color: var(--primary);
+      }
+      .sidebar-menu {
+        padding: 20px 15px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .sidebar-menu li {
+        margin-bottom: 8px;
+      }
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .sidebar-menu a i {
+        width: 24px;
+        font-size: 18px;
+        margin-right: 10px;
+        text-align: center;
+      }
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+      }
+      .sidebar-menu a.active {
+        border-left: 4px solid var(--primary);
+        padding-left: 11px;
+      }
+
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .header {
+        height: 70px;
+        background-color: var(--bg-main);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+      }
+      .header-left,
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .search-bar {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+      }
+      .search-bar i {
+        color: var(--text-muted);
+        margin-right: 10px;
+      }
+      .search-bar input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--text-main);
+        width: 100%;
+        font-family: "Inter";
+      }
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+      }
+
+      .content {
+        padding: 30px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      /* Layout CSS */
+      .card-container {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-soft);
+        padding: 25px;
+      }
+      .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .modern-table th {
+        text-align: left;
+        padding: 15px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 13px;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .modern-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      .modern-table tr:hover td {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .btn-outline:hover {
+        background: var(--border-color);
+      }
+
+      .form-control {
+        background: var(--bg-main);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-family: "Inter";
+        outline: none;
+      }
+      .form-control:focus {
+        border-color: var(--primary);
+      }
+
+      /* Specific CSS cho trang Orders */
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-block;
+        text-align: center;
+      }
+      .status-pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+      .status-confirmed {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+      }
+      .status-shipping {
+        background: rgba(139, 92, 246, 0.1);
+        color: #8b5cf6;
+      }
+      .status-completed {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .status-cancelled {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+      }
+
+      .status-paid {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .status-unpaid {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+
+      /* Order Details Specific */
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+      }
+      .info-block {
+        margin-bottom: 20px;
+      }
+      .info-block h4 {
+        font-size: 13px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+      .info-block p {
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .info-block strong {
+        color: var(--text-main);
+      }
+
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .summary-row:last-child {
+        border-bottom: none;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--primary);
+        padding-top: 15px;
+      }
+
+      #order-detail-view {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <i
+          class="fa-solid fa-cube"
+          style="color: var(--primary); margin-right: 10px"
+        ></i>
+        <span class="logo-text">F.Style<span>Admin</span></span>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="./admin.html"
+            ><i class="fa-solid fa-house"></i> <span>Tổng quan</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-products.html"
+            ><i class="fa-solid fa-box-open"></i> <span>Sản phẩm</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-categories.html"
+            ><i class="fa-solid fa-layer-group"></i> <span>Danh mục</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-orders.html" class="active"
+            ><i class="fa-solid fa-cart-shopping"></i> <span>Đơn hàng</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-users.html"
+            ><i class="fa-solid fa-users"></i> <span>Khách hàng</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-reviews.html"
+            ><i class="fa-solid fa-star"></i> <span>Đánh giá</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-coupons.html"
+            ><i class="fa-solid fa-ticket"></i> <span>Mã giảm giá</span></a
+          >
+        </li>
+        <li style="margin-top: 30px">
+          <a href="#"
+            ><i class="fa-solid fa-gear"></i> <span>Cài đặt hệ thống</span></a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="header">
+        <div class="header-left">
+          <button class="toggle-btn" id="toggle-sidebar">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Tìm kiếm đơn hàng (#ORD-...)" />
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="admin-profile">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+              class="admin-avatar"
+              alt="Admin"
+            />
+            <div class="admin-info">
+              <h4>Admin Phát</h4>
+              <p>Quản trị viên</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div id="order-list-view">
+          <div class="header-actions">
+            <div>
+              <h1 class="page-title" style="margin: 0">Quản lý Đơn hàng</h1>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 14px;
+                  margin-top: 5px;
+                "
+              >
+                Theo dõi quá trình xử lý, giao hàng và thanh toán.
+              </p>
+            </div>
+            <button class="btn-outline">
+              <i class="fa-solid fa-file-export"></i> Xuất File CSV
+            </button>
+          </div>
+
+          <div class="card-container">
+            <div
+              class="card-header"
+              style="margin-bottom: 20px; display: flex; gap: 15px"
+            >
+              <select class="form-control" style="width: 200px">
+                <option>Tất cả trạng thái</option>
+                <option>Chờ xác nhận</option>
+                <option>Đã xác nhận</option>
+                <option>Đang giao</option>
+                <option>Hoàn thành</option>
+                <option>Đã hủy</option>
+              </select>
+              <select class="form-control" style="width: 200px">
+                <option>Tất cả thanh toán</option>
+                <option>Đã thanh toán</option>
+                <option>Chưa thanh toán</option>
+              </select>
+            </div>
+            <table class="modern-table">
+              <thead>
+                <tr>
+                  <th>Mã đơn</th>
+                  <th>Ngày đặt</th>
+                  <th>Khách hàng</th>
+                  <th>Thanh toán</th>
+                  <th>Trạng thái</th>
+                  <th>Tổng tiền</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="admin-order-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="order-detail-view">
+          <div class="header-actions">
+            <div>
+              <div style="display: flex; align-items: center; gap: 15px">
+                <button
+                  class="btn-outline"
+                  id="btn-back-list"
+                  style="border: none; padding: 0; color: var(--text-muted)"
+                >
+                  <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h1 class="page-title" style="margin: 0" id="detail-order-id">
+                  #ORD-2026-9901
+                </h1>
+                <span
+                  class="status-badge status-pending"
+                  id="detail-order-status"
+                  >Chờ xác nhận</span
+                >
+              </div>
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 14px;
+                  margin-top: 5px;
+                  margin-left: 35px;
+                "
+                id="detail-order-date"
+              >
+                May 28, 2026 at 9:43 AM
+              </p>
+            </div>
+            <div style="display: flex; gap: 15px">
+              <button class="btn-outline">
+                <i class="fa-solid fa-print"></i> In Hóa Đơn
+              </button>
+              <button class="btn-outline">
+                <i class="fa-solid fa-file-pdf"></i> Xuất PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Danh sách Sản phẩm
+                </h2>
+                <table class="modern-table" style="margin-bottom: 20px">
+                  <thead>
+                    <tr>
+                      <th>Sản phẩm</th>
+                      <th>Đơn giá</th>
+                      <th>SL</th>
+                      <th style="text-align: right">Thành tiền</th>
+                    </tr>
+                  </thead>
+                  <tbody id="detail-products-body"></tbody>
+                </table>
+
+                <div style="width: 300px; margin-left: auto">
+                  <div class="summary-row">
+                    <span>Tạm tính</span> <span id="detail-subtotal">0đ</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Giảm giá (Coupon)</span>
+                    <span style="color: #ef4444" id="detail-discount"
+                      >- 0đ</span
+                    >
+                  </div>
+                  <div class="summary-row">
+                    <span>Phí giao hàng</span> <span>Miễn phí</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Tổng cộng</span> <span id="detail-total">0đ</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Cập nhật Tiến độ đơn hàng
+                </h2>
+                <div style="display: flex; gap: 15px; align-items: flex-end">
+                  <div style="flex: 1">
+                    <label
+                      style="
+                        display: block;
+                        margin-bottom: 8px;
+                        font-size: 14px;
+                        color: var(--text-muted);
+                      "
+                      >Chọn trạng thái mới</label
+                    >
+                    <select class="form-control" id="status-update-select">
+                      <option value="Chờ xác nhận">Chờ xác nhận</option>
+                      <option value="Đã xác nhận">Đã xác nhận</option>
+                      <option value="Đang giao">Đang giao hàng</option>
+                      <option value="Hoàn thành">Đã hoàn thành</option>
+                      <option value="Đã hủy">Hủy đơn hàng</option>
+                    </select>
+                  </div>
+                  <button class="btn-primary" id="btn-update-order-status">
+                    Cập nhật
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 25px">
+              <div class="card-container">
+                <h2
+                  class="card-title"
+                  style="
+                    margin-bottom: 20px;
+                    display: flex;
+                    justify-content: space-between;
+                  "
+                >
+                  Thông tin Khách hàng
+                </h2>
+                <div class="info-block">
+                  <h4>Liên hệ</h4>
+                  <p
+                    id="detail-customer-name"
+                    style="font-weight: 600; color: var(--primary)"
+                  >
+                    Nguyễn Văn A
+                  </p>
+                  <p id="detail-customer-email">nguyenvana@gmail.com</p>
+                  <p id="detail-customer-phone">0901234567</p>
+                </div>
+                <div class="info-block">
+                  <h4>Địa chỉ giao hàng</h4>
+                  <p id="detail-customer-address">
+                    Khu Công Nghệ Cao, Quận 9, TP. Hồ Chí Minh
+                  </p>
+                </div>
+              </div>
+
+              <div class="card-container">
+                <h2 class="card-title" style="margin-bottom: 20px">
+                  Thông tin Thanh toán
+                </h2>
+                <div class="info-block">
+                  <h4>Phương thức</h4>
+                  <p id="detail-payment-method">
+                    <i class="fa-regular fa-credit-card"></i> VNPAY (Internet
+                    Banking)
+                  </p>
+                </div>
+                <div class="info-block">
+                  <h4>Trạng thái thanh toán</h4>
+                  <span
+                    class="status-badge status-paid"
+                    id="detail-payment-status"
+                    >Đã thanh toán</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/admin-orders-client.js"></script>
+  </body>
+</html>

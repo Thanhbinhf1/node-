@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ghế Công Thái Học Cao Cấp | F.Style Store</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #ee4d2d;
+        --primary-light: #fff0ed;
+        --text-main: #222222;
+        --text-muted: #757575;
+        --bg-body: #f5f5f5;
+        --white: #ffffff;
+        --border: #e8e8e8;
+        --radius: 4px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-body);
+        color: var(--text-main);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* HEADER & BREADCRUMB */
+      header {
+        background: var(--white);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-bottom: 1px solid var(--border);
+      }
+      .header-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        gap: 40px;
+      }
+      .logo {
+        font-size: 28px;
+        font-weight: 900;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .breadcrumb {
+        padding: 20px 0;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .breadcrumb a:hover {
+        color: var(--primary);
+      }
+
+      /* ================= 1. KHU VỰC SẢN PHẨM CHÍNH ================= */
+      .product-brief {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 20px;
+        display: flex;
+        gap: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+
+      /* 1A. Gallery Ảnh */
+      .product-gallery {
+        width: 450px;
+        flex-shrink: 0;
+      }
+      .main-img-wrap {
+        width: 100%;
+        height: 450px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 10px;
+        overflow: hidden;
+        position: relative;
+        cursor: crosshair;
+      }
+      .main-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.1s;
+      }
+
+      .thumb-list {
+        display: flex;
+        gap: 10px;
+      }
+      .thumb-item {
+        width: 82px;
+        height: 82px;
+        border: 2px solid transparent;
+        border-radius: var(--radius);
+        cursor: pointer;
+        overflow: hidden;
+      }
+      .thumb-item.active {
+        border-color: var(--primary);
+      }
+      .thumb-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* 1B. Thông tin Sản phẩm */
+      .product-info {
+        flex: 1;
+      }
+      .product-title {
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.4;
+        margin-bottom: 10px;
+      }
+
+      .meta-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 13px;
+        margin-bottom: 15px;
+        color: var(--text-muted);
+      }
+      .stars {
+        color: #ee4d2d;
+      }
+      .meta-divider {
+        width: 1px;
+        height: 14px;
+        background: var(--border);
+      }
+
+      .price-box {
+        background: #fafafa;
+        padding: 15px 20px;
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+      .old-price {
+        font-size: 16px;
+        color: var(--text-muted);
+        text-decoration: line-through;
+      }
+      .current-price {
+        font-size: 30px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+      .discount-label {
+        background: var(--primary);
+        color: var(--white);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 2px;
+        text-transform: uppercase;
+      }
+
+      /* Biến thể */
+      .variant-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .variant-label {
+        width: 110px;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+      .variant-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        flex: 1;
+      }
+      .opt-btn {
+        background: var(--white);
+        border: 1px solid var(--border);
+        padding: 8px 15px;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s;
+        min-width: 60px;
+        text-align: center;
+      }
+      .opt-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .opt-btn.active {
+        border-color: var(--primary);
+        color: var(--primary);
+        position: relative;
+      }
+      .opt-btn.active::after {
+        content: "✓";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: var(--primary);
+        color: var(--white);
+        font-size: 8px;
+        padding: 2px;
+        border-top-left-radius: 4px;
+      }
+
+      /* Màu sắc có icon màu */
+      .opt-color {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .color-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+      }
+
+      /* Số lượng */
+      .qty-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        width: fit-content;
+        overflow: hidden;
+      }
+      .qty-btn {
+        width: 32px;
+        height: 32px;
+        background: var(--white);
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .qty-input {
+        width: 50px;
+        height: 32px;
+        border: none;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+        text-align: center;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .stock-text {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-left: 15px;
+      }
+
+      /* Nút Hành Động */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+      }
+      .btn-add-cart {
+        background: var(--primary-light);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+        padding: 12px 25px;
+        border-radius: var(--radius);
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.2s;
+      }
+      .btn-add-cart:hover {
+        background: #ffe4de;
+      }
+      .btn-buy-now {
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 12px 35px;
+        border-radius: var(--radius);
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-buy-now:hover {
+        background: #d73d1e;
+      }
+      .btn-wishlist {
+        background: var(--white);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-wishlist:hover {
+        color: #ef4444;
+        border-color: #ef4444;
+      }
+
+      /* ================= 2. TABS THÔNG TIN ================= */
+      .product-tabs-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .tab-headers {
+        display: flex;
+        gap: 30px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 20px;
+      }
+      .tab-head {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--text-main);
+        padding-bottom: 15px;
+        cursor: pointer;
+        position: relative;
+      }
+      .tab-head.active {
+        color: var(--primary);
+      }
+      .tab-head.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: var(--primary);
+      }
+
+      .tab-content {
+        display: none;
+        font-size: 14px;
+        line-height: 1.8;
+        color: #444;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      /* Table thông số */
+      .spec-table {
+        width: 100%;
+        max-width: 600px;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      .spec-table td {
+        padding: 10px 15px;
+        border: 1px solid var(--border);
+      }
+      .spec-table td:first-child {
+        background: #fafafa;
+        width: 40%;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* ================= 3. SẢN PHẨM TƯƠNG TỰ (CAROUSEL) ================= */
+      .related-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 25px;
+        margin-bottom: 50px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .related-title {
+        font-size: 16px;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+      }
+      .carousel-wrap {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+      }
+
+      /* Re-use Product Card CSS from listing page */
+      .product-card {
+        width: 220px;
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: 0.2s;
+        scroll-snap-align: start;
+      }
+      .product-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-2px);
+      }
+      .product-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .product-info-small {
+        padding: 10px;
+      }
+      .product-name-small {
+        font-size: 13px;
+        line-height: 1.4;
+        height: 36px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        margin-bottom: 5px;
+      }
+      .current-price-small {
+        color: var(--primary);
+        font-size: 15px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-main">
+        <a href="index.html" class="logo"
+          ><i class="fa-solid fa-cube"></i> F.Style</a
+        >
+        <div class="header-icons">
+          <i
+            class="fa-solid fa-cart-shopping"
+            style="font-size: 22px; color: var(--text-main)"
+          ></i>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a> &nbsp;>&nbsp;
+        <a href="#">Nội thất văn phòng</a> &nbsp;>&nbsp;
+        <span style="color: var(--text-main)"
+          >Ghế Công Thái Học Bản Premium 2026</span
+        >
+      </div>
+
+      <section class="product-brief">
+<div class="product-gallery">
+  <div class="main-img-wrap" id="img-zoom-container">
+    <img src="" id="detail-main-img" alt="Hình sản phẩm" />
+  </div>
+  <div class="thumb-list" id="detail-gallery">
+    </div>
+</div>
+
+        <div class="product-info">
+          <h1 class="product-title">
+            Ghế Công Thái Học F.Style Ergonomic Premium 2026 Lưới Đan Tự Động
+            Thoáng Khí Chống Đau Mỏi Vai Gáy
+          </h1>
+
+          <div class="meta-row">
+            <div class="stars">
+              <span
+                style="
+                  color: var(--text-main);
+                  font-weight: 600;
+                  border-bottom: 1px solid var(--primary);
+                  padding-bottom: 1px;
+                  margin-right: 5px;
+                "
+                >4.9</span
+              >
+              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i>
+            </div>
+            <div class="meta-divider"></div>
+            <div>
+              <span style="font-weight: 600; color: var(--text-main)"
+                >1.2k</span
+              >
+              Đánh Giá
+            </div>
+            <div class="meta-divider"></div>
+            <div>
+              <span style="font-weight: 600; color: var(--text-main)"
+                >4.5k</span
+              >
+              Đã Bán
+            </div>
+          </div>
+
+<h1 class="product-title" id="detail-title">Đang tải tên sản phẩm...</h1>
+...
+<div class="price-box">
+  <span class="old-price" id="detail-old-price"></span>
+  <span class="current-price" id="detail-price"></span>
+  <span class="discount-label">Giảm 29%</span>
+</div>
+
+          <div class="meta-row" style="margin-bottom: 25px">
+            <div>
+              Thương hiệu: <a href="#" style="color: var(--primary)">F.Style</a>
+            </div>
+            <div class="meta-divider"></div>
+            <div>SKU: <span id="sku-display">FS-ERGO-BLK-S</span></div>
+          </div>
+
+<div class="variant-group">
+            <div class="variant-label">Màu Sắc</div>
+            <div class="variant-options" id="color-options">
+              <div class="opt-btn opt-color active" data-value="Đen">
+                <div class="color-dot" style="background: #111"></div>
+                Đen
+              </div>        
+              <div class="opt-btn opt-color" data-value="Trắng">
+                <div class="color-dot" style="background: #f8f9fa"></div>
+                Trắng
+              </div>
+              <div class="opt-btn opt-color" data-value="Xanh Navy">
+                <div class="color-dot" style="background: #3b82f6"></div>
+                Xanh Navy
+              </div>
+            </div>
+          </div>
+
+          <div class="variant-group">
+            <div class="variant-label">Kích Thước</div>
+            <div class="variant-options" id="size-options">
+              <div class="opt-btn active" data-value="Size S">Size S</div>
+              <div class="opt-btn" data-value="Size M">Size M</div>
+              <div class="opt-btn" data-value="Size L">Size L</div>
+              <div class="opt-btn" data-value="Size XL">Size XL</div>
+            </div>
+          </div>
+          <div
+            class="variant-group"
+            style="margin-top: 30px; align-items: center"
+          >
+            <div class="variant-label">Số Lượng</div>
+<div class="qty-control">
+  <button class="qty-btn" id="btn-qty-minus">-</button>
+  <input type="number" class="qty-input" id="detail-qty" value="1" min="1" readonly />
+  <button class="qty-btn" id="btn-qty-plus">+</button>
+</div>
+            <div class="stock-text" id="stock-display">42 sản phẩm có sẵn</div>
+          </div>
+
+<div class="action-buttons">
+  <button class="btn-add-cart" id="btn-add-to-cart">
+    <i class="fa-solid fa-cart-plus"></i> Thêm Vào Giỏ Hàng
+  </button>
+  <button class="btn-buy-now" id="btn-buy-now">Mua Ngay</button>
+  <button class="btn-wishlist">
+    <i class="fa-regular fa-heart"></i>
+  </button>
+</div>
+        </div>
+      </section>
+
+      <section class="product-tabs-section">
+        <div class="tab-headers">
+          <div class="tab-head active" onclick="switchTab('desc', this)">
+            Mô Tả Sản Phẩm
+          </div>
+          <div class="tab-head" onclick="switchTab('specs', this)">
+            Thông Số Kỹ Thuật
+          </div>
+          <div class="tab-head" onclick="switchTab('reviews', this)">
+            Đánh Giá Khách Hàng (1.2k)
+          </div>
+        </div>
+<div class="tab-content active" id="detail-desc">
+  </div>
+          <p>
+            <strong>Ghế Công Thái Học F.Style Ergonomic Premium 2026</strong> là
+            dòng sản phẩm cao cấp được thiết kế riêng cho người dùng phải ngồi
+            làm việc trong thời gian dài. Với bộ khung Nilon đúc siêu bền và hệ
+            thống lưới thoáng khí nhập khẩu từ Hàn Quốc, sản phẩm giúp tản nhiệt
+            hoàn hảo, không gây bí bách.
+          </p>
+          <br />
+          <p>
+            Cơ chế ngả lưng 135 độ kết hợp cùng đệm đỡ thắt lưng 3D tự động điều
+            chỉnh theo chuyển động cơ thể, giúp định hình cột sống, giảm thiểu
+            tuyệt đối tình trạng đau mỏi vai gáy. Trải nghiệm sự thoải mái tối
+            đa để bứt phá hiệu suất công việc!
+          </p>
+        </div>
+
+        <div class="tab-content" id="tab-specs">
+          <table class="spec-table">
+            <tr>
+              <td>Thương hiệu</td>
+              <td>F.Style</td>
+            </tr>
+            <tr>
+              <td>Chất liệu đệm</td>
+              <td>Lưới cao cấp (Mesh)</td>
+            </tr>
+            <tr>
+              <td>Tải trọng tối đa</td>
+              <td>120 kg</td>
+            </tr>
+            <tr>
+              <td>Bảo hành</td>
+              <td>5 năm chính hãng</td>
+            </tr>
+            <tr>
+              <td>Trọng lượng ghế</td>
+              <td>18 kg</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="tab-content" id="tab-reviews">
+          <div
+            style="
+              display: flex;
+              gap: 15px;
+              margin-bottom: 20px;
+              border-bottom: 1px solid var(--border);
+              padding-bottom: 20px;
+            "
+          >
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50"
+              style="width: 40px; height: 40px; border-radius: 50%"
+            />
+            <div>
+              <div style="font-weight: 600; font-size: 13px">phat.fpt</div>
+              <div style="color: #ee4d2d; font-size: 10px; margin: 3px 0">
+                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i>
+              </div>
+              <div
+                style="
+                  font-size: 12px;
+                  color: var(--text-muted);
+                  margin-bottom: 8px;
+                "
+              >
+                Phân loại: Đen, Size M
+              </div>
+              <p style="font-size: 14px">
+                Ghế ngồi rất sướng, ráp dễ. Tựa đầu ôm sát cổ, lưới căng và mát.
+                Đáng tiền lắm nha mọi người!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="related-section">
+        <div class="related-title">Các Sản Phẩm Tương Tự</div>
+        <div class="carousel-wrap" id="related-carousel"></div>
+      </section>
+    </div>
+
+    <script type="module" src="./../js/product-detail-client.js"></script>
+  </body>
+</html>

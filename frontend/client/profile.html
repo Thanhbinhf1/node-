@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ Sơ Của Tôi | F.Style Store 2026</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #ee4d2d;
+        --primary-light: #fff0ed;
+        --text-main: #222222;
+        --text-muted: #757575;
+        --bg-body: #f5f5f5;
+        --white: #ffffff;
+        --border: #efefef;
+        --radius: 4px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-body);
+        color: var(--text-main);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* HEADER (Dùng chung style tối giản) */
+      header {
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .header-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+      }
+      .logo {
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* LAYOUT CHÍNH */
+      .profile-layout {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 30px;
+        margin-top: 30px;
+        margin-bottom: 50px;
+        align-items: start;
+      }
+
+      /* ================= SIDEBAR MENU ================= */
+      .user-brief {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #dbdbdb;
+        margin-bottom: 20px;
+      }
+      .sidebar-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      .brief-info .username {
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .brief-info .edit-link {
+        font-size: 12px;
+        color: #888;
+        cursor: pointer;
+      }
+
+      .side-menu {
+        list-style: none;
+      }
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        font-size: 14px;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .menu-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 16px;
+        color: #4656ca;
+      } /* Màu xanh Shopee */
+      .menu-item:hover,
+      .menu-item.active {
+        color: var(--primary);
+      }
+      .menu-item.active i {
+        color: var(--primary);
+      }
+
+      /* ================= NỘI DUNG CHÍNH (CARD) ================= */
+      .main-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+      }
+      .card-header {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .card-header h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+      .card-header p {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .profile-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 280px;
+        gap: 50px;
+      }
+
+      /* Cột trái: Các ô input */
+      .form-left {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        align-items: center;
+      }
+      .form-row label {
+        font-size: 14px;
+        color: rgba(85, 85, 85, 0.8);
+        text-align: right;
+        padding-right: 20px;
+      }
+      .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        outline: none;
+        font-size: 14px;
+        transition: 0.2s;
+      }
+      .form-control:focus {
+        border-color: #999;
+      }
+
+      .btn-save {
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 120px;
+        width: fit-content;
+        transition: 0.2s;
+      }
+      .btn-save:hover {
+        background: #d73d1e;
+      }
+
+      /* Cột phải: Đổi Avatar */
+      .avatar-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-left: 1px solid var(--border);
+        padding-left: 20px;
+      }
+      .big-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+      }
+      .btn-upload {
+        background: var(--white);
+        border: 1px solid var(--border);
+        padding: 8px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        color: #555;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03);
+      }
+      .btn-upload:hover {
+        background: #fbfbfb;
+      }
+      .upload-desc {
+        font-size: 13px;
+        color: #999;
+        margin-top: 15px;
+        text-align: center;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-main">
+        <a href="index.html" class="logo"
+          ><i class="fa-solid fa-cube"></i> F.Style</a
+        >
+        <div style="font-size: 14px; color: var(--text-muted)">
+          Trang khách hàng
+        </div>
+      </div>
+    </header>
+
+    <div class="container profile-layout">
+      <aside class="sidebar">
+        <div class="user-brief">
+          <img
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+            class="sidebar-avatar"
+            id="side-avatar"
+          />
+          <div class="brief-info">
+            <div class="username">phat.fpt</div>
+            <div class="edit-link">
+              <i class="fa-solid fa-pen"></i> Sửa hồ sơ
+            </div>
+          </div>
+        </div>
+
+        <nav class="side-menu">
+          <li class="menu-item active">
+            <i class="fa-regular fa-user" style="color: #ffc107"></i> Hồ sơ
+          </li>
+          <li class="menu-item">
+            <i class="fa-solid fa-clipboard-list" style="color: #4656ca"></i>
+            Đơn mua
+          </li>
+          <li class="menu-item">
+            <i class="fa-regular fa-heart" style="color: #ee4d2d"></i> Yêu thích
+          </li>
+          <li class="menu-item">
+            <i class="fa-solid fa-key" style="color: #10b981"></i> Đổi mật khẩu
+          </li>
+          <li
+            class="menu-item"
+            style="
+              margin-top: 10px;
+              border-top: 1px solid var(--border);
+              padding-top: 20px;
+            "
+            onclick="window.location.href = 'index.html'"
+          >
+            <i
+              class="fa-solid fa-arrow-right-from-bracket"
+              style="color: #888"
+            ></i>
+            Đăng xuất
+          </li>
+        </nav>
+      </aside>
+
+      <main class="main-card">
+        <div class="card-header">
+          <h2>Hồ Sơ Của Tôi</h2>
+          <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+        </div>
+
+        <div class="profile-form-grid">
+          <div class="form-left">
+            <div class="form-row">
+              <label>Tên đăng nhập</label>
+              <div style="font-size: 14px; font-weight: 500">phat.fpt</div>
+            </div>
+            <div class="form-row">
+              <label>Họ và tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="profile-name"
+                value="Nguyễn Tấn Phát"
+              />
+            </div>
+            <div class="form-row">
+              <label>Email</label>
+              <div style="font-size: 14px">
+                phat.fpt*****@gmail.com
+                <a
+                  href="#"
+                  style="color: #05a; margin-left: 10px; font-size: 13px"
+                  >Thay đổi</a
+                >
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Số điện thoại</label>
+              <div style="font-size: 14px">
+                *********67
+                <a
+                  href="#"
+                  style="color: #05a; margin-left: 10px; font-size: 13px"
+                  >Thay đổi</a
+                >
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Địa chỉ</label>
+              <textarea
+                class="form-control"
+                id="profile-address"
+                style="min-height: 80px"
+              >
+Khu Công Nghệ Cao, Quận 9, TP. Hồ Chí Minh</textarea
+              >
+            </div>
+
+            <button class="btn-save" id="btn-update-profile">
+              Lưu thay đổi
+            </button>
+          </div>
+
+          <div class="avatar-column">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200"
+              class="big-avatar"
+              id="profile-avatar-preview"
+            />
+            <input
+              type="file"
+              id="avatar-input"
+              hidden
+              accept=".jpg,.jpeg,.png"
+            />
+            <button
+              class="btn-upload"
+              onclick="document.getElementById('avatar-input').click()"
+            >
+              Chọn ảnh
+            </button>
+            <div class="upload-desc">
+              Dụng lượng file tối đa 1 MB<br />
+              Định dạng: .JPEG, .PNG
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/profile-client.js"></script>
+  </body>
+</html>

@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng quan Hệ thống | Admin F.Style</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --bg-main: #0f172a;
+        --bg-sidebar: #111827;
+        --bg-card: #1e293b;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --shadow-soft:
+          0 10px 25px -5px rgba(0, 0, 0, 0.5),
+          0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      ul {
+        list-style: none;
+      }
+      .sidebar {
+        width: 260px;
+        background-color: var(--bg-sidebar);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+      }
+      .sidebar-logo {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        font-size: 22px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .sidebar-logo span {
+        color: var(--primary);
+      }
+      .sidebar-menu {
+        padding: 20px 15px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .sidebar-menu li {
+        margin-bottom: 8px;
+      }
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: var(--radius-md);
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .sidebar-menu a i {
+        width: 24px;
+        font-size: 18px;
+        margin-right: 10px;
+        text-align: center;
+      }
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background-color: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+        border-left: 4px solid var(--primary);
+        padding-left: 11px;
+      }
+      .main-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .header {
+        height: 70px;
+        background-color: var(--bg-main);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+      }
+      .header-left,
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .search-bar {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 30px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        width: 300px;
+      }
+      .search-bar i {
+        color: var(--text-muted);
+        margin-right: 10px;
+      }
+      .search-bar input {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--text-main);
+        width: 100%;
+        font-family: "Inter";
+      }
+      .icon-btn {
+        position: relative;
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .badge {
+        position: absolute;
+        top: -5px;
+        right: -8px;
+        background: #ef4444;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 10px;
+        border: 2px solid var(--bg-main);
+      }
+      .admin-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+      }
+      .admin-info h4 {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .admin-info p {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .content {
+        padding: 30px;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .page-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: var(--text-main);
+      }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+      .stat-card {
+        background: var(--bg-card);
+        padding: 25px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: var(--transition);
+      }
+      .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+      }
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+      }
+      .bg-gradient-1 {
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      }
+      .bg-gradient-2 {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+      .bg-gradient-3 {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      }
+      .bg-gradient-4 {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+      .stat-info h3 {
+        font-size: 14px;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      .stat-info .value {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+      .stat-info .trend {
+        font-size: 13px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .trend.up {
+        color: #10b981;
+      }
+      .trend.down {
+        color: #ef4444;
+      }
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+      }
+      .card-container {
+        background: var(--bg-card);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-color);
+        padding: 25px;
+        margin-bottom: 25px;
+      }
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .card-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .btn-sm {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--primary);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-sm:hover {
+        background: var(--primary);
+        color: white;
+      }
+      .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .modern-table th {
+        text-align: left;
+        padding: 15px;
+        color: var(--text-muted);
+        font-weight: 500;
+        font-size: 13px;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .modern-table td {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 14px;
+        color: var(--text-main);
+        vertical-align: middle;
+      }
+      .table-product {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .table-product img {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      .status-badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .status-pending {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+      }
+      .status-completed {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+      }
+      .status-shipping {
+        background: rgba(139, 92, 246, 0.1);
+        color: #8b5cf6;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <i
+          class="fa-solid fa-cube"
+          style="color: var(--primary); margin-right: 10px"
+        ></i
+        ><span>F.Style<span>Admin</span></span>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="./admin.html" class="active"
+            ><i class="fa-solid fa-house"></i> <span>Tổng quan</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-products.html"
+            ><i class="fa-solid fa-box-open"></i> <span>Sản phẩm</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-categories.html"
+            ><i class="fa-solid fa-layer-group"></i> <span>Danh mục</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-orders.html"
+            ><i class="fa-solid fa-cart-shopping"></i> <span>Đơn hàng</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-users.html"
+            ><i class="fa-solid fa-users"></i> <span>Khách hàng</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-reviews.html"
+            ><i class="fa-solid fa-star"></i> <span>Đánh giá</span></a
+          >
+        </li>
+        <li>
+          <a href="./admin-coupons.html"
+            ><i class="fa-solid fa-ticket"></i> <span>Mã giảm giá</span></a
+          >
+        </li>
+      </ul>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="header">
+        <div class="header-left">
+          <button class="toggle-btn">
+            <i class="fa-solid fa-bars-staggered"></i>
+          </button>
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i
+            ><input type="text" placeholder="Tìm kiếm nhanh..." />
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="icon-btn">
+            <i class="fa-regular fa-bell"></i><span class="badge">4</span>
+          </div>
+          <div class="admin-profile">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+              class="admin-avatar"
+              alt="Admin"
+            />
+            <div class="admin-info">
+              <h4>Admin Phát</h4>
+              <p>Quản trị viên</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <h1 class="page-title">Bảng phân tích (Dashboard)</h1>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-gradient-1">
+              <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Doanh thu tổng</h3>
+              <div class="value" id="stat-revenue">0đ</div>
+              <div class="trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i> +12.5%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-gradient-2">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Tổng Đơn hàng</h3>
+              <div class="value" id="stat-orders">0</div>
+              <div class="trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i> +5.2%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-gradient-3">
+              <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Tổng Sản phẩm</h3>
+              <div class="value" id="stat-products">0</div>
+              <div class="trend down">
+                <i class="fa-solid fa-arrow-trend-down"></i> -2 SP hết hàng
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon bg-gradient-4">
+              <i class="fa-solid fa-user-group"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Tổng Khách hàng</h3>
+              <div class="value" id="stat-users">0</div>
+              <div class="trend up">
+                <i class="fa-solid fa-arrow-trend-up"></i> +184 user mới
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card-container">
+            <div class="card-header">
+              <h2 class="card-title">Biểu đồ Doanh thu (7 ngày qua)</h2>
+            </div>
+            <div style="position: relative; height: 320px; width: 100%">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card-container">
+            <div class="card-header">
+              <h2 class="card-title">Đơn hàng mới nhất</h2>
+              <button
+                class="btn-sm"
+                onclick="window.location.href = 'admin-orders.html'"
+              >
+                Xem tất cả
+              </button>
+            </div>
+            <table class="modern-table">
+              <thead>
+                <tr>
+                  <th>Khách hàng</th>
+                  <th>Tổng tiền</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-orders-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card-container">
+          <div class="card-header">
+            <h2 class="card-title">Sản phẩm bán chạy nhất</h2>
+          </div>
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th>Sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Giá bán</th>
+                <th>Đã bán</th>
+                <th>Tồn kho</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-products-body"></tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/admin-dashboard-client.js"></script>
+  </body>
+</html>

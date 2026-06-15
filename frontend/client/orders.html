@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đơn Hàng Của Tôi | F.Style Store 2026</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary: #ee4d2d;
+        --primary-light: #fff0ed;
+        --text-main: #222222;
+        --text-muted: #757575;
+        --bg-body: #f5f5f5;
+        --white: #ffffff;
+        --border: #efefef;
+        --radius: 4px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-body);
+        color: var(--text-main);
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* HEADER */
+      header {
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .header-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+      }
+      .logo {
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* LAYOUT CHÍNH (Đồng bộ với trang Profile) */
+      .profile-layout {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 30px;
+        margin-top: 30px;
+        margin-bottom: 50px;
+        align-items: start;
+      }
+
+      /* SIDEBAR MENU */
+      .user-brief {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #dbdbdb;
+        margin-bottom: 20px;
+      }
+      .sidebar-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .brief-info .username {
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .brief-info .edit-link {
+        font-size: 12px;
+        color: #888;
+      }
+
+      .side-menu {
+        list-style: none;
+      }
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        font-size: 14px;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .menu-item i {
+        width: 20px;
+        text-align: center;
+        font-size: 16px;
+        color: #888;
+      }
+      .menu-item:hover,
+      .menu-item.active {
+        color: var(--primary);
+      }
+      .menu-item.active i {
+        color: var(--primary);
+      }
+
+      /* ================= KHU VỰC ĐƠN HÀNG ================= */
+      /* Thanh Tabs trạng thái kiểu Shopee */
+      .order-tabs {
+        background: var(--white);
+        display: flex;
+        border-radius: var(--radius);
+        margin-bottom: 15px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+      .tab-item {
+        flex: 1;
+        padding: 16px 0;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: 0.2s;
+        position: relative;
+      }
+      .tab-item:hover {
+        color: var(--primary);
+      }
+      .tab-item.active {
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .tab-item.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--primary);
+      }
+
+      /* Danh sách đơn hàng */
+      .orders-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .order-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        border: 1px solid transparent;
+        transition: 0.2s;
+      }
+      .order-card:hover {
+        border-color: #ddd;
+      }
+
+      .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+        margin-bottom: 15px;
+      }
+      .order-id-txt {
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 15px;
+      }
+      .order-date-txt {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      /* Trạng thái đơn hàng */
+      .status-txt {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .status-cho-xac-nhan {
+        color: #f59e0b;
+      }
+      .status-da-xac-nhan {
+        color: #3b82f6;
+      }
+      .status-dang-giao {
+        color: #8b5cf6;
+      }
+      .status-hoan-thanh {
+        color: #10b981;
+      }
+      .status-da-huy {
+        color: #ef4444;
+      }
+
+      .order-card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .total-box {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+      .total-amount {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-top: 4px;
+      }
+
+      .btn-detail {
+        background: var(--white);
+        border: 1px solid #ced4da;
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .btn-detail:hover {
+        background: #f8f9fa;
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      /* Màn hình trống đơn */
+      .empty-orders {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--white);
+        border-radius: var(--radius);
+        display: none;
+      }
+      .empty-orders i {
+        font-size: 50px;
+        color: #ccc;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container header-main">
+        <a href="index.html" class="logo"
+          ><i class="fa-solid fa-cube"></i> F.Style</a
+        >
+        <div style="font-size: 14px; color: var(--text-muted)">
+          Trang khách hàng
+        </div>
+      </div>
+    </header>
+
+    <div class="container profile-layout">
+      <aside class="sidebar">
+        <div class="user-brief">
+          <img
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100"
+            class="sidebar-avatar"
+          />
+          <div class="brief-info">
+            <div class="username">phat.fpt</div>
+            <div class="edit-link">
+              <i class="fa-solid fa-pen"></i> Sửa hồ sơ
+            </div>
+          </div>
+        </div>
+
+        <nav class="side-menu">
+          <li class="menu-item" onclick="window.location.href = 'profile.html'">
+            <i class="fa-regular fa-user"></i> Hồ sơ
+          </li>
+          <li class="menu-item active">
+            <i class="fa-solid fa-clipboard-list"></i> Đơn mua
+          </li>
+          <li class="menu-item">
+            <i class="fa-regular fa-heart"></i> Yêu thích
+          </li>
+          <li class="menu-item">
+            <i class="fa-solid fa-key"></i> Đổi mật khẩu
+          </li>
+          <li
+            class="menu-item"
+            style="
+              margin-top: 10px;
+              border-top: 1px solid var(--border);
+              padding-top: 20px;
+            "
+            onclick="window.location.href = 'index.html'"
+          >
+            <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất
+          </li>
+        </nav>
+      </aside>
+
+      <main style="flex: 1; min-width: 0">
+        <div class="order-tabs">
+          <div class="tab-item active" data-status="all">Tất cả</div>
+          <div class="tab-item" data-status="Chờ xác nhận">Chờ xác nhận</div>
+          <div class="tab-item" data-status="Đã xác nhận">Đã xác nhận</div>
+          <div class="tab-item" data-status="Đang giao">Đang giao</div>
+          <div class="tab-item" data-status="Hoàn thành">Hoàn thành</div>
+          <div class="tab-item" data-status="Đã hủy">Đã hủy</div>
+        </div>
+
+        <div class="orders-container" id="orders-list-wrapper"></div>
+
+        <div class="empty-orders" id="empty-orders-msg">
+          <i class="fa-regular fa-clipboard"></i>
+          <p style="color: var(--text-muted)">Chưa có đơn hàng nào phù hợp</p>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="./../js/orders-client.js"></script>
+  </body>
+</html>
