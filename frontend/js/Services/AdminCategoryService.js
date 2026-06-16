@@ -1,19 +1,17 @@
 export class AdminCategoryService {
-    API_URL = "http://localhost:3000/api/categories";
+    apiUrl = "http://localhost:3000/api/categories";
     async getAllCategories() {
         try {
-            const response = await fetch(this.API_URL);
+            const response = await fetch(this.apiUrl);
+            if (!response.ok)
+                return [];
             const data = await response.json();
             return data.map((item) => ({
                 id: item._id,
                 name: item.name,
-                slug: item.slug,
-                parent: item.parent || "None",
-                productsCount: 0,
-                status: item.status || "Active",
-                image: item.image
-                    ? `http://localhost:3000${item.image}`
-                    : "https://via.placeholder.com/100",
+                slug: item.slug || item.name.toLowerCase().replace(/ /g, "-"),
+                productCount: item.productCount || 0,
+                status: item.status || "Hoạt động",
             }));
         }
         catch (error) {
@@ -22,18 +20,23 @@ export class AdminCategoryService {
     }
     async getCategoryById(id) {
         try {
-            const response = await fetch(`${this.API_URL}/${id}`);
-            return response.ok ? await response.json() : null;
+            const response = await fetch(`${this.apiUrl}/${id}`);
+            if (!response.ok)
+                return null;
+            return await response.json();
         }
         catch (error) {
+            console.error("Lỗi lấy chi tiết danh mục:", error);
             return null;
         }
     }
     async addCategory(formData) {
         try {
-            const response = await fetch(this.API_URL, {
+            const plainData = Object.fromEntries(formData.entries());
+            const response = await fetch(this.apiUrl, {
                 method: "POST",
-                body: formData,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(plainData),
             });
             return response.ok;
         }
@@ -43,9 +46,11 @@ export class AdminCategoryService {
     }
     async updateCategory(id, formData) {
         try {
-            const response = await fetch(`${this.API_URL}/${id}`, {
+            const plainData = Object.fromEntries(formData.entries());
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: "PUT",
-                body: formData,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(plainData),
             });
             return response.ok;
         }
@@ -55,7 +60,7 @@ export class AdminCategoryService {
     }
     async deleteCategory(id) {
         try {
-            const response = await fetch(`${this.API_URL}/${id}`, {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: "DELETE",
             });
             return response.ok;

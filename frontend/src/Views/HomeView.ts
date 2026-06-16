@@ -5,7 +5,7 @@ export class HomeView {
   private bannerContainer = document.getElementById("hero-slider");
   private hotProductsGrid = document.getElementById("recommend-grid");
 
-  // 1. In Banner Quảng cáo (Đã khớp với class .slide)
+  // 1. In Banner Quảng cáo
   renderBanners(banners: Banner[]) {
     if (!this.bannerContainer) return;
 
@@ -24,7 +24,7 @@ export class HomeView {
       .join("");
   }
 
-  // 2. In Lưới sản phẩm nổi bật (Đã khớp với cấu trúc HTML sếp thiết kế)
+  // 2. In Lưới sản phẩm nổi bật
   renderHotProducts(products: Product[]) {
     if (!this.hotProductsGrid) return;
 
@@ -32,24 +32,28 @@ export class HomeView {
       .map(
         (p) => `
             <div class="product-card">
-                <div class="discount-badge">-${p.discount}</div>
-                <a href="product.html?id=${p.id}"><img src="${p.image}" class="product-img"></a>
+                ${p.discount ? `<div class="discount-badge">-${p.discount}</div>` : ""}
+                
+<a href="product.html?id=${p.id}">
+    <img src="${p.image || "https://dummyimage.com/300x300/cccccc/000000&text=No+Image"}" class="product-img" alt="${p.name}">
+</a>
+                
                 <div class="product-info">
                     <div class="product-name">${p.name}</div>
                     
                     <div class="sold-progress-bg">
                         <div class="sold-progress-fill" style="width: 80%;"></div>
-                        <div class="sold-text">Đã bán ${p.sold}</div>
+                        <div class="sold-text">Đã bán ${p.sold || 0}</div>
                     </div>
 
                     <div class="price-row">
-                        <span class="current-price">${p.price.toLocaleString("vi-VN")}đ</span>
-                        <span class="old-price">${p.oldPrice.toLocaleString("vi-VN")}đ</span>
+                        <span class="current-price">${(p.price || 0).toLocaleString("vi-VN")}đ</span>
+                        ${p.oldPrice ? `<span class="old-price">${p.oldPrice.toLocaleString("vi-VN")}đ</span>` : ""}
                     </div>
                     
                     <div class="action-row">
                         <div class="rating">
-                            <i class="fa-solid fa-star"></i> ${p.rating}
+                            <i class="fa-solid fa-star"></i> ${p.rating || 5}
                         </div>
                         <div>
                             <button class="btn-wishlist" style="margin-right: 5px;"><i class="fa-regular fa-heart"></i></button>

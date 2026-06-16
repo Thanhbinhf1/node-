@@ -1,42 +1,46 @@
 import { AdminCategory } from "../Models/AdminCategory.js";
 
 export class AdminCategoryService {
-  private API_URL = "http://localhost:3000/api/categories";
+  private apiUrl = "http://localhost:3000/api/categories";
 
   async getAllCategories(): Promise<AdminCategory[]> {
     try {
-      const response = await fetch(this.API_URL);
+      const response = await fetch(this.apiUrl);
+      if (!response.ok) return [];
+
       const data = await response.json();
       return data.map((item: any) => ({
         id: item._id,
         name: item.name,
-        slug: item.slug,
-        parent: item.parent || "None",
-        productsCount: 0, // Sau này rảnh mình truy vấn nối với Product để lấy số thực tế sau
-        status: item.status || "Active",
-        image: item.image
-          ? `http://localhost:3000${item.image}`
-          : "https://via.placeholder.com/100", // Ảnh mặc định nếu chưa up
+        slug: item.slug || item.name.toLowerCase().replace(/ /g, "-"),
+        productCount: item.productCount || 0,
+        status: item.status || "Hoạt động",
       }));
     } catch (error) {
       return [];
     }
   }
 
+  // Bổ sung hàm lấy 1 danh mục (Sửa lỗi TS2339)
   async getCategoryById(id: string): Promise<any> {
     try {
-      const response = await fetch(`${this.API_URL}/${id}`);
-      return response.ok ? await response.json() : null;
+      const response = await fetch(`${this.apiUrl}/${id}`);
+      if (!response.ok) return null;
+      return await response.json();
     } catch (error) {
+      console.error("Lỗi lấy chi tiết danh mục:", error);
       return null;
     }
   }
 
+  // Đổi tên thành addCategory và trả về boolean (Sửa lỗi TS2339, TS2322, TS1345)
   async addCategory(formData: FormData): Promise<boolean> {
     try {
-      const response = await fetch(this.API_URL, {
+      const plainData = Object.fromEntries(formData.entries());
+      const response = await fetch(this.apiUrl, {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(plainData),
       });
       return response.ok;
     } catch (error) {
@@ -44,11 +48,14 @@ export class AdminCategoryService {
     }
   }
 
+  // Trả về boolean thay vì void
   async updateCategory(id: string, formData: FormData): Promise<boolean> {
     try {
-      const response = await fetch(`${this.API_URL}/${id}`, {
+      const plainData = Object.fromEntries(formData.entries());
+      const response = await fetch(`${this.apiUrl}/${id}`, {
         method: "PUT",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(plainData),
       });
       return response.ok;
     } catch (error) {
@@ -56,9 +63,10 @@ export class AdminCategoryService {
     }
   }
 
+  // Trả về boolean thay vì void
   async deleteCategory(id: string): Promise<boolean> {
     try {
-      const response = await fetch(`${this.API_URL}/${id}`, {
+      const response = await fetch(`${this.apiUrl}/${id}`, {
         method: "DELETE",
       });
       return response.ok;

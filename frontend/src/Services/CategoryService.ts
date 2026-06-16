@@ -1,17 +1,26 @@
-import { CategoryModel } from "../Models/Category.js"; // Lấy đúng từ file Category
+import { CategoryModel } from "../Models/Category.js";
 
 export class CategoryService {
-  private mockData: CategoryModel[] = [
-    { id: 1, name: "Bàn Làm Việc", slug: "ban-lam-viec", image: "img1.jpg" },
-    {
-      id: 2,
-      name: "Ghế Công Thái Học",
-      slug: "ghe-cong-thai-hoc",
-      image: "img2.jpg",
-    },
-  ];
+  private apiUrl = "http://localhost:3000/api/categories";
 
   async getAllCategories(): Promise<CategoryModel[]> {
-    return [...this.mockData];
+    try {
+      const response = await fetch(this.apiUrl);
+      if (!response.ok) return [];
+
+      const data = await response.json();
+
+      return data.map((item: any) => ({
+        id: item._id, // Bắt buộc ID của MongoDB
+        name: item.name,
+        slug: item.slug || item.name.toLowerCase().replace(/ /g, "-"),
+        image:
+          item.image ||
+          "https://dummyimage.com/300x300/cccccc/000000&text=No+Image",
+      }));
+    } catch (error) {
+      console.error("Lỗi lấy danh mục:", error);
+      return [];
+    }
   }
 }

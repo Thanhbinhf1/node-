@@ -1,20 +1,19 @@
 export class AdminReviewService {
-    API_URL = "http://localhost:3000/api/reviews";
+    apiUrl = "http://localhost:3000/api/reviews";
     async getAllReviews() {
         try {
-            const response = await fetch(this.API_URL);
+            const response = await fetch(this.apiUrl);
+            if (!response.ok)
+                return [];
             const data = await response.json();
             return data.map((item) => ({
                 id: item._id,
-                userName: item.userName || "Ẩn danh",
-                userAvatar: item.userAvatar || "https://via.placeholder.com/100",
-                date: item.createdAt
-                    ? new Date(item.createdAt).toLocaleDateString("vi-VN")
-                    : "",
-                productName: item.productName || "Sản phẩm",
+                customerName: item.user?.fullName || item.customerName || "Khách ẩn danh",
+                productName: item.product?.name || "Sản phẩm không rõ",
                 rating: item.rating || 5,
-                comment: item.comment || "",
-                status: item.status || "Pending",
+                content: item.content || "",
+                date: new Date(item.createdAt).toLocaleDateString("vi-VN"),
+                status: item.status || "Approved",
             }));
         }
         catch (error) {
@@ -23,7 +22,7 @@ export class AdminReviewService {
     }
     async updateReviewStatus(id, status) {
         try {
-            const response = await fetch(`${this.API_URL}/${id}/status`, {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status }),
@@ -36,7 +35,7 @@ export class AdminReviewService {
     }
     async deleteReview(id) {
         try {
-            const response = await fetch(`${this.API_URL}/${id}`, {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: "DELETE",
             });
             return response.ok;

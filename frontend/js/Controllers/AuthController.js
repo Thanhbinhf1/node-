@@ -21,6 +21,7 @@ export class AuthController {
         if (response.success) {
             alert(response.msg);
             localStorage.setItem("fstyle_token", response.token || "");
+            localStorage.setItem("userId", response.user?._id || "");
             window.location.href = "index.html";
         }
         else {

@@ -1,45 +1,28 @@
 import { Product } from "../Models/Product.js";
 
 export class ProductService {
-  // Dữ liệu giả lập (Sau này thay bằng gọi API Backend)
-  private mockData: Product[] = [
-    {
-      id: 1,
-      name: "Ghế Công Thái Học F.Style",
-      category: "Ghế",
-      price: 3200000,
-      oldPrice: 4500000,
-      discount: "29%",
-      rating: 5,
-      sold: 1250,
-      inStock: true,
-      image:
-        "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=300",
-      dateAdded: "2026-05-10",
-    },
-    {
-      id: 2,
-      name: "Bàn Nâng Hạ Smart Desk",
-      category: "Bàn",
-      price: 4500000,
-      oldPrice: 6000000,
-      discount: "25%",
-      rating: 4.8,
-      sold: 840,
-      inStock: true,
-      image:
-        "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300",
-      dateAdded: "2026-05-15",
-    },
-    // Thêm các sản phẩm khác...
-  ];
+  // Trỏ tới API lấy sản phẩm của Backend
+  private apiUrl = "http://localhost:3000/api/products";
 
-  // Hàm lấy toàn bộ sp
+  // Hàm lấy toàn bộ sp từ Database
   async getAllProducts(): Promise<Product[]> {
-    return [...this.mockData];
+    try {
+      const response = await fetch(this.apiUrl);
+      if (!response.ok) throw new Error("Lỗi khi tải dữ liệu sản phẩm");
+      const data = await response.json();
+
+      // MongoDB trả về _id, ta map nó thành id để View bên bạn không bị lỗi
+      return data.map((item: any) => ({
+        ...item,
+        id: item._id,
+      }));
+    } catch (error) {
+      console.error(error);
+      return []; // Nếu lỗi thì trả về mảng rỗng tránh sập web
+    }
   }
 
-  // Hàm lọc tổng hợp (Logic nghiệp vụ nằm hết ở đây)
+  // Hàm lọc tổng hợp
   async filterProducts(
     keyword: string,
     categories: string[],
@@ -47,33 +30,34 @@ export class ProductService {
     maxPrice: number,
     sortBy: string,
   ): Promise<Product[]> {
-    let result = [...this.mockData];
+    // 1. Phải lấy mảng sản phẩm thật từ Database trước
+    let result = await this.getAllProducts();
 
-    // 1. Lọc từ khóa
+    // 2. Các logic lọc của bạn giữ nguyên, nó sẽ lọc trên mảng thật
     if (keyword) {
       result = result.filter((p) =>
         p.name.toLowerCase().includes(keyword.toLowerCase()),
       );
     }
 
-    // 2. Lọc danh mục
     if (categories.length > 0) {
+      // Lưu ý: Nếu DB category của bạn trả về ID hoặc Object, logic này có thể cần sửa chút đỉnh
       result = result.filter((p) => categories.indexOf(p.category) !== -1);
     }
 
-    // 3. Lọc giá
     if (minPrice > 0) result = result.filter((p) => p.price >= minPrice);
     if (maxPrice > 0) result = result.filter((p) => p.price <= maxPrice);
 
-    // 4. Sắp xếp
     if (sortBy === "price-asc") result.sort((a, b) => a.price - b.price);
     if (sortBy === "price-desc") result.sort((a, b) => b.price - a.price);
     if (sortBy === "sales") result.sort((a, b) => b.sold - a.sold);
-    if (sortBy === "new")
+    if (sortBy === "new") {
       result.sort(
         (a, b) =>
-          new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+          new Date(b.createdAt || Date.now()).getTime() -
+          new Date(a.createdAt || Date.now()).getTime(),
       );
+    }
 
     return result;
   }

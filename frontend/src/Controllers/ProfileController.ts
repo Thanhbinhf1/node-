@@ -13,10 +13,17 @@ export class ProfileController {
     this.view.bindUpdateEvent(this.handleUpdateProfile.bind(this));
   }
 
-  // Chạy khi vừa vào trang
   async init() {
     const profileData = await this.service.getProfile();
-    this.view.renderProfileData(profileData);
+
+    // Kiểm tra xem có dữ liệu profile không (Đã đăng nhập chưa?)
+    if (profileData) {
+      this.view.renderProfileData(profileData);
+    } else {
+      // Nếu chưa đăng nhập (profileData là null) -> Bắt buộc văng ra trang đăng nhập
+      alert("Vui lòng đăng nhập để xem thông tin cá nhân!");
+      window.location.href = "auth.html";
+    }
   }
 
   // Xử lý khi bấm nút "Lưu thay đổi"

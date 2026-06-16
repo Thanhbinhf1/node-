@@ -24,18 +24,21 @@ export class CartController {
   // Hàm gọi chung để vẽ lại toàn bộ giỏ hàng
   private async refreshCartDisplay() {
     const items = await this.service.getCartItems();
-    const summary = this.service.getSummary();
+    // Thêm await vì getSummary bây giờ cần lấy dữ liệu mới nhất
+    const summary = await this.service.getSummary();
 
     this.view.renderCartList(items);
     this.view.renderSummary(summary);
   }
 
-  async updateQuantity(id: number, change: number) {
+  // Đổi id: number thành id: string (Sửa lỗi TS2345)
+  async updateQuantity(id: string, change: number) {
     await this.service.updateQuantity(id, change);
     this.refreshCartDisplay(); // Vẽ lại
   }
 
-  async removeItem(id: number) {
+  // Đổi id: number thành id: string (Sửa lỗi TS2345)
+  async removeItem(id: string) {
     await this.service.removeItem(id);
     this.refreshCartDisplay(); // Vẽ lại
   }

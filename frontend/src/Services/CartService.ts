@@ -1,43 +1,31 @@
-import { CartItem } from "../Models/CartItem.js";
+import { CartItem } from "../Models/CartItem.js"; // Đã thêm import để sửa lỗi TS2304
 
 export class CartService {
-  // Dữ liệu giỏ hàng (Sau này thay bằng API gọi từ Database)
-  private cartItems: CartItem[] = [
-    {
-      id: 1,
-      name: "Ghế Công Thái Học F.Style",
-      variant: "Đen",
-      price: 3200000,
-      qty: 1,
-      img: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=150",
-    },
-    {
-      id: 2,
-      name: "Arm Màn Hình Kép",
-      variant: "Trắng",
-      price: 1200000,
-      qty: 2,
-      img: "https://images.unsplash.com/photo-1527443154391-4208e9baea10?w=150",
-    },
-  ];
   private discountAmount: number = 0;
 
+  // Lấy dữ liệu thực tế từ Local Storage
   async getCartItems(): Promise<CartItem[]> {
-    return this.cartItems;
+    const cartData = localStorage.getItem("cart");
+    return cartData ? JSON.parse(cartData) : [];
   }
 
-  async updateQuantity(id: number, change: number): Promise<void> {
-    const item = this.cartItems.find((i) => i.id === id);
+  async updateQuantity(id: string, change: number): Promise<void> {
+    let cart = await this.getCartItems();
+    const item = cart.find((i) => i.id === id);
     if (item) {
       item.qty += change;
-      if (item.qty < 1) item.qty = 1; // Không cho giảm quá 1
+      if (item.qty < 1) item.qty = 1;
+      localStorage.setItem("cart", JSON.stringify(cart));
     }
   }
 
-  async removeItem(id: number): Promise<void> {
-    this.cartItems = this.cartItems.filter((i) => i.id !== id);
+  async removeItem(id: string): Promise<void> {
+    let cart = await this.getCartItems();
+    cart = cart.filter((i) => i.id !== id);
+    localStorage.setItem("cart", JSON.stringify(cart));
   }
 
+  // Khôi phục lại hàm applyCoupon (Sửa lỗi TS2339)
   async applyCoupon(
     code: string,
   ): Promise<{ success: boolean; msg: string; amount: number }> {
@@ -53,9 +41,14 @@ export class CartService {
     return { success: false, msg: "Mã không hợp lệ hoặc hết hạn!", amount: 0 };
   }
 
-  // Tính toán bảng tổng kết tiền
-  getSummary() {
-    const subtotal = this.cartItems.reduce(
+  // Khôi phục lại hàm getSummary và đọc từ giỏ hàng hiện tại (Sửa lỗi TS2339)
+  async getSummary(): Promise<{
+    subtotal: number;
+    discount: number;
+    total: number;
+  }> {
+    const cartItems = await this.getCartItems();
+    const subtotal = cartItems.reduce(
       (sum, item) => sum + item.price * item.qty,
       0,
     );

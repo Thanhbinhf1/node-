@@ -3,6 +3,13 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema(
   {
     orderId: { type: String, required: true, unique: true }, // VD: ORD-2026-9901
+    // Thêm liên kết tới người dùng (nếu mua dạng khách vãng lai thì để null)
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
+
     customerName: { type: String, required: true },
     email: { type: String },
     phone: { type: String, required: true },
@@ -27,6 +34,12 @@ const orderSchema = new mongoose.Schema(
     },
     items: [
       {
+        // Thêm liên kết tới sản phẩm gốc để sau này làm chức năng trừ kho
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
         name: String,
         price: Number,
         qty: Number,

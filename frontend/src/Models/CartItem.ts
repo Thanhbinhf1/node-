@@ -1,5 +1,5 @@
 export interface CartItem {
-  id: number;
+  id: string; // Đổi từ number sang string
   name: string;
   variant: string;
   price: number;

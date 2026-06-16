@@ -27,8 +27,10 @@ export class AuthController {
 
     if (response.success) {
       alert(response.msg);
-      // Lưu token vào LocalStorage rồi nhảy trang
+      // Lưu token và userId vào LocalStorage
       localStorage.setItem("fstyle_token", response.token || "");
+      // Dùng dấu chấm hỏi (?.) để bọc an toàn
+      localStorage.setItem("userId", response.user?._id || "");
       window.location.href = "index.html";
     } else {
       alert(response.msg);

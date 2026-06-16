@@ -1,37 +1,23 @@
 export class ProductService {
-    mockData = [
-        {
-            id: 1,
-            name: "Ghế Công Thái Học F.Style",
-            category: "Ghế",
-            price: 3200000,
-            oldPrice: 4500000,
-            discount: "29%",
-            rating: 5,
-            sold: 1250,
-            inStock: true,
-            image: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=300",
-            dateAdded: "2026-05-10",
-        },
-        {
-            id: 2,
-            name: "Bàn Nâng Hạ Smart Desk",
-            category: "Bàn",
-            price: 4500000,
-            oldPrice: 6000000,
-            discount: "25%",
-            rating: 4.8,
-            sold: 840,
-            inStock: true,
-            image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300",
-            dateAdded: "2026-05-15",
-        },
-    ];
+    apiUrl = "http://localhost:3000/api/products";
     async getAllProducts() {
-        return [...this.mockData];
+        try {
+            const response = await fetch(this.apiUrl);
+            if (!response.ok)
+                throw new Error("Lỗi khi tải dữ liệu sản phẩm");
+            const data = await response.json();
+            return data.map((item) => ({
+                ...item,
+                id: item._id,
+            }));
+        }
+        catch (error) {
+            console.error(error);
+            return [];
+        }
     }
     async filterProducts(keyword, categories, minPrice, maxPrice, sortBy) {
-        let result = [...this.mockData];
+        let result = await this.getAllProducts();
         if (keyword) {
             result = result.filter((p) => p.name.toLowerCase().includes(keyword.toLowerCase()));
         }
@@ -48,8 +34,10 @@ export class ProductService {
             result.sort((a, b) => b.price - a.price);
         if (sortBy === "sales")
             result.sort((a, b) => b.sold - a.sold);
-        if (sortBy === "new")
-            result.sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime());
+        if (sortBy === "new") {
+            result.sort((a, b) => new Date(b.createdAt || Date.now()).getTime() -
+                new Date(a.createdAt || Date.now()).getTime());
+        }
         return result;
     }
 }

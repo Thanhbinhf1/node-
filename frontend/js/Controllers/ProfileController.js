@@ -10,7 +10,13 @@ export class ProfileController {
     }
     async init() {
         const profileData = await this.service.getProfile();
-        this.view.renderProfileData(profileData);
+        if (profileData) {
+            this.view.renderProfileData(profileData);
+        }
+        else {
+            alert("Vui lòng đăng nhập để xem thông tin cá nhân!");
+            window.location.href = "auth.html";
+        }
     }
     async handleUpdateProfile(data) {
         if (!data.fullName) {

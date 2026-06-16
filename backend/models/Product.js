@@ -5,15 +5,17 @@ const productSchema = new mongoose.Schema(
     sku: {
       type: String,
       required: true,
-      unique: true, // Đảm bảo mã SKU không bao giờ trùng
+      unique: true,
     },
     name: {
       type: String,
       required: [true, "Vui lòng nhập tên sản phẩm"],
       trim: true,
     },
+    // Sửa lại thành ObjectId liên kết với bảng Category
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
     },
     image: {
@@ -34,10 +36,10 @@ const productSchema = new mongoose.Schema(
       default: "Active",
     },
     description: { type: String },
-    images: [String], // Mảng chứa các link ảnh
+    images: [String],
   },
   {
-    timestamps: true, // Tự động sinh ra createdAt và updatedAt
+    timestamps: true,
   },
 );
 

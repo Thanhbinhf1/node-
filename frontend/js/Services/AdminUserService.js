@@ -7,17 +7,21 @@ export class AdminUserService {
         return res.json();
     }
     async createUser(formData) {
+        const plainFormData = Object.fromEntries(formData.entries());
         const res = await fetch(this.apiUrl, {
             method: "POST",
-            body: formData,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(plainFormData),
         });
         if (!res.ok)
             throw new Error("Lỗi khi tạo tài khoản");
     }
     async updateUser(id, formData) {
+        const plainFormData = Object.fromEntries(formData.entries());
         const res = await fetch(`${this.apiUrl}/${id}`, {
             method: "PUT",
-            body: formData,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(plainFormData),
         });
         if (!res.ok)
             throw new Error("Lỗi khi cập nhật tài khoản");

@@ -69,15 +69,18 @@ export class CartView {
     bindCartEvents(handleQty, handleRemove, handleCoupon) {
         this.cartTable?.addEventListener("click", (e) => {
             const target = e.target;
+            const id = target.getAttribute("data-id");
+            if (!id)
+                return;
             if (target.classList.contains("btn-plus")) {
-                handleQty(Number(target.getAttribute("data-id")), 1);
+                handleQty(id, 1);
             }
             else if (target.classList.contains("btn-minus")) {
-                handleQty(Number(target.getAttribute("data-id")), -1);
+                handleQty(id, -1);
             }
             else if (target.classList.contains("btn-delete")) {
                 if (confirm("Xóa sản phẩm này khỏi giỏ hàng?")) {
-                    handleRemove(Number(target.getAttribute("data-id")));
+                    handleRemove(id);
                 }
             }
         });

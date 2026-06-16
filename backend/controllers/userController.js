@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 const userController = {
   getAllUsers: async (req, res) => {
@@ -27,7 +28,16 @@ const userController = {
   // Dùng để Admin tạo tài khoản nhân viên mới
   createUser: async (req, res) => {
     try {
-      const newUser = await User.create(req.body);
+      // BƯỚC SỬA LỖI: Mã hóa mật khẩu trước khi đưa vào Database
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+      // Tạo user với mật khẩu đã mã hóa
+      const newUser = await User.create({
+        ...req.body,
+        password: hashedPassword,
+      });
+
       res
         .status(201)
         .json({ message: "Tạo tài khoản thành công", data: newUser });
@@ -42,9 +52,13 @@ const userController = {
 
   updateUser: async (req, res) => {
     try {
-      // Nếu không gửi password mới thì xóa field password khỏi req.body để tránh ghi đè rỗng
       if (!req.body.password) {
+        // Nếu Admin không nhập mật khẩu mới -> xóa field password để không ghi đè mất pass cũ
         delete req.body.password;
+      } else {
+        // BƯỚC SỬA LỖI: Nếu Admin nhập mật khẩu mới -> phải mã hóa nó lại
+        const salt = await bcrypt.genSalt(10);
+        req.body.password = await bcrypt.hash(req.body.password, salt);
       }
 
       const updatedUser = await User.findByIdAndUpdate(
@@ -52,6 +66,7 @@ const userController = {
         req.body,
         { new: true },
       ).select("-password");
+
       if (!updatedUser)
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
       res

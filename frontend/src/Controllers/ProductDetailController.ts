@@ -2,14 +2,16 @@ import { ProductDetailService } from "../Services/ProductDetailService.js";
 import { ProductDetailView } from "../Views/ProductDetailView.js";
 
 export class ProductDetailController {
-  private productId: number = 0;
+  // 1. Đổi kiểu dữ liệu sang chuỗi (string) hoặc null
+  private productId: string | null = null;
 
   constructor(
     private service: ProductDetailService,
     private view: ProductDetailView,
   ) {
     const urlParams = new URLSearchParams(window.location.search);
-    this.productId = parseInt(urlParams.get("id") || "1");
+    // 2. Không dùng parseInt nữa, lấy trực tiếp chuỗi ID trên thanh URL
+    this.productId = urlParams.get("id");
 
     this.init();
 
@@ -22,6 +24,13 @@ export class ProductDetailController {
   }
 
   async init() {
+    // Nếu không có ID trên URL thì báo lỗi luôn
+    if (!this.productId) {
+      this.view.renderError();
+      return;
+    }
+
+    // 3. Phải dùng this.productId
     const product = await this.service.getProductById(this.productId);
 
     if (product) {

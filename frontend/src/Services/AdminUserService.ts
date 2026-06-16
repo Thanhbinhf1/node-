@@ -1,7 +1,6 @@
 import { AdminUser } from "../Models/AdminUser.js";
 
 export class AdminUserService {
-  // Sếp nhớ đổi cổng 3000 cho khớp với Backend của sếp nhé
   private apiUrl = "http://localhost:3000/api/users";
 
   async getAllUsers(): Promise<AdminUser[]> {
@@ -11,17 +10,24 @@ export class AdminUserService {
   }
 
   async createUser(formData: FormData): Promise<void> {
+    // Ép FormData thành Object để chuyển sang JSON
+    const plainFormData = Object.fromEntries(formData.entries());
+
     const res = await fetch(this.apiUrl, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" }, // Khai báo gửi JSON
+      body: JSON.stringify(plainFormData),
     });
     if (!res.ok) throw new Error("Lỗi khi tạo tài khoản");
   }
 
   async updateUser(id: string, formData: FormData): Promise<void> {
+    const plainFormData = Object.fromEntries(formData.entries());
+
     const res = await fetch(`${this.apiUrl}/${id}`, {
       method: "PUT",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(plainFormData),
     });
     if (!res.ok) throw new Error("Lỗi khi cập nhật tài khoản");
   }

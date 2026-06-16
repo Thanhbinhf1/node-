@@ -80,23 +80,28 @@ export class CartView {
     this.couponMsg.innerText = msg;
   }
 
-  // 4. Bắt sự kiện ném cho Controller
+  // 4. Bắt sự kiện ném cho Controller (Đã sửa id thành string)
   bindCartEvents(
-    handleQty: (id: number, change: number) => void,
-    handleRemove: (id: number) => void,
+    handleQty: (id: string, change: number) => void,
+    handleRemove: (id: string) => void,
     handleCoupon: (code: string) => void,
   ) {
     // Lắng nghe click trên toàn bộ bảng giỏ hàng (Event Delegation)
     this.cartTable?.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
 
+      // Lấy id dạng chuỗi và kiểm tra xem có tồn tại không
+      const id = target.getAttribute("data-id");
+      if (!id) return;
+
       if (target.classList.contains("btn-plus")) {
-        handleQty(Number(target.getAttribute("data-id")), 1);
+        // Trực tiếp truyền id dạng chuỗi
+        handleQty(id, 1);
       } else if (target.classList.contains("btn-minus")) {
-        handleQty(Number(target.getAttribute("data-id")), -1);
+        handleQty(id, -1);
       } else if (target.classList.contains("btn-delete")) {
         if (confirm("Xóa sản phẩm này khỏi giỏ hàng?")) {
-          handleRemove(Number(target.getAttribute("data-id")));
+          handleRemove(id);
         }
       }
     });

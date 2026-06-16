@@ -1,65 +1,65 @@
 export class DashboardService {
+    orderApi = "http://localhost:3000/api/orders";
+    userApi = "http://localhost:3000/api/users";
+    productApi = "http://localhost:3000/api/products";
     async getStats() {
-        return new Promise((resolve) => setTimeout(() => resolve({
-            revenue: "124.5M",
-            revenueTrend: "+12.5%",
-            orders: 842,
-            ordersTrend: "+5.2%",
-            products: 156,
-            users: 2845,
-            usersTrend: "+184",
-        }), 200));
+        try {
+            const [ordersRes, usersRes, productsRes] = await Promise.all([
+                fetch(this.orderApi),
+                fetch(this.userApi),
+                fetch(this.productApi),
+            ]);
+            const orders = await ordersRes.json();
+            const users = await usersRes.json();
+            const products = await productsRes.json();
+            const totalRevenue = orders
+                .filter((o) => o.status === "Hoàn thành")
+                .reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+            return {
+                revenue: totalRevenue,
+                orders: orders.length,
+                users: users.length,
+                products: products.length,
+            };
+        }
+        catch (error) {
+            return { revenue: 0, orders: 0, users: 0, products: 0 };
+        }
     }
     async getChartData() {
-        return new Promise((resolve) => setTimeout(() => resolve({
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-            data: [65, 78, 90, 81, 105, 124, 115],
-        }), 200));
+        return {
+            labels: ["T1", "T2", "T3", "T4", "T5", "T6", "T7"],
+            data: [12000000, 19000000, 3000000, 5000000, 2000000, 3000000, 10000000],
+        };
     }
     async getLatestOrders() {
-        return new Promise((resolve) => setTimeout(() => resolve([
-            {
-                id: "ORD-2026-9901",
-                customer: "Nguyễn Văn A",
-                total: 3200000,
-                status: "Completed",
-            },
-            {
-                id: "ORD-2026-9902",
-                customer: "Lê Thị B",
-                total: 14800000,
-                status: "Pending",
-            },
-            {
-                id: "ORD-2026-9903",
-                customer: "Trần Văn C",
-                total: 18500000,
-                status: "Completed",
-            },
-        ]), 200));
+        try {
+            const response = await fetch(this.orderApi);
+            const orders = await response.json();
+            return orders.slice(0, 5).map((o) => ({
+                id: o.orderId,
+                customer: o.customerName || "Khách vãng lai",
+                total: o.totalAmount,
+                status: o.status,
+            }));
+        }
+        catch (error) {
+            return [];
+        }
     }
     async getTopProducts() {
-        return new Promise((resolve) => setTimeout(() => resolve([
-            {
-                id: "1",
-                name: "Ghế Công Thái Học F.Style",
-                sku: "FS-ERGO-BLK",
-                category: "Workspace",
-                price: 3200000,
-                sold: 1250,
-                stock: 15,
-                img: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=100",
-            },
-            {
-                id: "2",
-                name: "Bàn Ăn Mặt Đá Ceramic",
-                sku: "BAN-DA-TRANG",
-                category: "Kitchen",
-                price: 14800000,
-                sold: 840,
-                stock: 5,
-                img: "https://images.unsplash.com/photo-1617806118233-18e1c0945594?w=100",
-            },
-        ]), 200));
+        try {
+            const response = await fetch(this.productApi);
+            const products = await response.json();
+            products.sort((a, b) => (b.sold || 0) - (a.sold || 0));
+            return products.slice(0, 5).map((p) => ({
+                name: p.name,
+                sold: p.sold || 0,
+                price: p.price || 0,
+            }));
+        }
+        catch (error) {
+            return [];
+        }
     }
 }

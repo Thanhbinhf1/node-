@@ -1,43 +1,68 @@
 import { UserProfile } from "../Models/Profile.js";
 
 export class ProfileService {
-  // Dữ liệu giả lập (Sau này lấy dựa trên Token đăng nhập)
-  private mockProfile: UserProfile = {
-    id: 1,
-    username: "phat.fpt",
-    fullName: "Nguyễn Tấn Phát", // Tên lấy từ Profile cũ của ông
-    email: "phat.fpt*****@gmail.com",
-    phone: "*********67",
-    address: "Khu Công Nghệ Cao, Quận 9, TP. Hồ Chí Minh",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200",
-  };
+  private apiUrl = "http://localhost:3000/api/users";
 
-  // Lấy thông tin
-  async getProfile(): Promise<UserProfile> {
-    // Giả lập delay mạng
-    return new Promise((resolve) =>
-      setTimeout(() => resolve({ ...this.mockProfile }), 500),
-    );
+  private getUserId(): string | null {
+    // Lấy ID người dùng lưu lúc đăng nhập
+    return localStorage.getItem("userId");
   }
 
-  // Cập nhật thông tin
+  // Lấy thông tin
+  async getProfile(): Promise<UserProfile | null> {
+    const userId = this.getUserId();
+    if (!userId) return null; // Chưa đăng nhập
+
+    try {
+      const response = await fetch(`${this.apiUrl}/${userId}`);
+      if (!response.ok) return null;
+
+      const data = await response.json();
+      return {
+        id: data._id,
+        username: data.email.split("@")[0], // Cắt phần đầu email làm username
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone || "Chưa cập nhật",
+        address: data.address || "Chưa cập nhật",
+        avatarUrl:
+          data.avatar ||
+          "https://dummyimage.com/200x200/cccccc/000000&text=Avatar",
+      };
+    } catch (error) {
+      console.error("Lỗi lấy thông tin cá nhân:", error);
+      return null;
+    }
+  }
+
+  // Cập nhật thông tin qua API
   async updateProfile(updatedData: {
     fullName: string;
     address: string;
     newAvatar?: string;
   }): Promise<{ success: boolean; msg: string }> {
-    console.log("Đang gửi API cập nhật:", updatedData);
+    const userId = this.getUserId();
+    if (!userId) return { success: false, msg: "Vui lòng đăng nhập lại!" };
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        this.mockProfile.fullName = updatedData.fullName;
-        this.mockProfile.address = updatedData.address;
-        if (updatedData.newAvatar) {
-          this.mockProfile.avatarUrl = updatedData.newAvatar;
-        }
-        resolve({ success: true, msg: "Cập nhật hồ sơ thành công!" });
-      }, 1000);
-    });
+    try {
+      const response = await fetch(`${this.apiUrl}/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: updatedData.fullName,
+          address: updatedData.address,
+          avatar: updatedData.newAvatar,
+        }),
+      });
+
+      if (response.ok) {
+        return { success: true, msg: "Cập nhật hồ sơ thành công!" };
+      } else {
+        const errData = await response.json();
+        return { success: false, msg: errData.message || "Cập nhật thất bại!" };
+      }
+    } catch (error) {
+      return { success: false, msg: "Không thể kết nối đến máy chủ!" };
+    }
   }
 }

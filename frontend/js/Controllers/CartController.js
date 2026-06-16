@@ -12,7 +12,7 @@ export class CartController {
     }
     async refreshCartDisplay() {
         const items = await this.service.getCartItems();
-        const summary = this.service.getSummary();
+        const summary = await this.service.getSummary();
         this.view.renderCartList(items);
         this.view.renderSummary(summary);
     }
