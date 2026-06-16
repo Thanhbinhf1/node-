@@ -5,11 +5,13 @@ export class HomeView {
         if (!this.bannerContainer)
             return;
         this.bannerContainer.innerHTML = banners
-            .map((banner) => `
-            <div class="banner-slide">
-                <a href="${banner.link}">
-                    <img src="${banner.imageUrl}" alt="${banner.altText}" class="banner-img" style="width: 100%; border-radius: 10px;">
-                </a>
+            .map((banner, index) => `
+            <div class="slide ${index === 0 ? "active" : ""}" style="background-image: url('${banner.imageUrl}')">
+                <div class="slide-overlay"></div>
+                <div class="slide-content">
+                    <h2>${banner.altText}</h2>
+                    <a href="${banner.link}" class="btn-buy">Xem Ngay</a>
+                </div>
             </div>
         `)
             .join("");
@@ -23,17 +25,27 @@ export class HomeView {
                 <div class="discount-badge">-${p.discount}</div>
                 <a href="product.html?id=${p.id}"><img src="${p.image}" class="product-img"></a>
                 <div class="product-info">
-                    <div class="product-cat">${p.category}</div>
                     <div class="product-name">${p.name}</div>
-                    <div class="price-wrap">
+                    
+                    <div class="sold-progress-bg">
+                        <div class="sold-progress-fill" style="width: 80%;"></div>
+                        <div class="sold-text">Đã bán ${p.sold}</div>
+                    </div>
+
+                    <div class="price-row">
                         <span class="current-price">${p.price.toLocaleString("vi-VN")}đ</span>
                         <span class="old-price">${p.oldPrice.toLocaleString("vi-VN")}đ</span>
                     </div>
-                    <div class="rating-sold">
-                        <span class="rating">⭐ ${p.rating}</span>
-                        <span class="sold">Đã bán ${p.sold}</span>
+                    
+                    <div class="action-row">
+                        <div class="rating">
+                            <i class="fa-solid fa-star"></i> ${p.rating}
+                        </div>
+                        <div>
+                            <button class="btn-wishlist" style="margin-right: 5px;"><i class="fa-regular fa-heart"></i></button>
+                            <button class="btn-add-cart" onclick="alert('Đã thêm ${p.name} vào giỏ hàng!')"><i class="fa-solid fa-cart-plus"></i></button>
+                        </div>
                     </div>
-                    <button class="btn-add-cart" onclick="alert('Thêm ${p.name} vào giỏ!')">Thêm vào giỏ</button>
                 </div>
             </div>
         `)

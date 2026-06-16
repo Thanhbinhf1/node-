@@ -124,7 +124,7 @@ export class AdminCouponView {
         let statusClass = "status-active";
 
         // Cập nhật trạng thái hiển thị
-        let displayStatus = c.status;
+        let displayStatus: string = c.status;
         if (
           c.status === "Expired" ||
           (c.usageLimit && c.usageCount >= c.usageLimit)

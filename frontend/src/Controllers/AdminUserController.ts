@@ -6,8 +6,8 @@ export class AdminUserController {
   private users: AdminUser[] = [];
 
   constructor(
-    private view: AdminUserView,
     private service: AdminUserService,
+    private view: AdminUserView,
   ) {}
 
   async init() {

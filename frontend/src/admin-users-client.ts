@@ -5,7 +5,7 @@ import { AdminUserController } from "./Controllers/AdminUserController.js";
 document.addEventListener("DOMContentLoaded", () => {
   const view = new AdminUserView();
   const service = new AdminUserService();
-  const controller = new AdminUserController(view, service);
+  const controller = new AdminUserController(service, view);
 
   // Kích hoạt toàn bộ hệ thống
   controller.init();

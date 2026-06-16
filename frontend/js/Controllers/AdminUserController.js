@@ -1,10 +1,10 @@
 export class AdminUserController {
-    view;
     service;
+    view;
     users = [];
-    constructor(view, service) {
-        this.view = view;
+    constructor(service, view) {
         this.service = service;
+        this.view = view;
     }
     async init() {
         this.view.bindActionEvents(this.handleDelete.bind(this), this.handleEdit.bind(this));
