@@ -24,30 +24,6 @@ export class AdminProductService {
             return [];
         }
     }
-    async deleteProduct(id) {
-        try {
-            const response = await fetch(`${this.API_URL}/${id}`, {
-                method: "DELETE",
-            });
-            return response.ok;
-        }
-        catch (error) {
-            console.error("Lỗi xóa từ Backend:", error);
-            return false;
-        }
-    }
-    async addProduct(formData) {
-        try {
-            const response = await fetch(this.API_URL, {
-                method: "POST",
-                body: formData,
-            });
-            return response.ok;
-        }
-        catch (error) {
-            return false;
-        }
-    }
     async getProductById(id) {
         try {
             const response = await fetch(`${this.API_URL}/${id}`);
@@ -60,17 +36,53 @@ export class AdminProductService {
             return null;
         }
     }
-    async updateProduct(id, data) {
+    async addProduct(formData) {
         try {
+            const token = localStorage.getItem("fstyle_token");
+            const response = await fetch(this.API_URL, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+            return response.ok;
+        }
+        catch (error) {
+            console.error("Lỗi thêm sản phẩm:", error);
+            return false;
+        }
+    }
+    async updateProduct(id, formData) {
+        try {
+            const token = localStorage.getItem("fstyle_token");
             const response = await fetch(`${this.API_URL}/${id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
             });
             return response.ok;
         }
         catch (error) {
             console.error("Lỗi cập nhật sản phẩm:", error);
+            return false;
+        }
+    }
+    async deleteProduct(id) {
+        try {
+            const token = localStorage.getItem("fstyle_token");
+            const response = await fetch(`${this.API_URL}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.ok;
+        }
+        catch (error) {
+            console.error("Lỗi xóa từ Backend:", error);
             return false;
         }
     }

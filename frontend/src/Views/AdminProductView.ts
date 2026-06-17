@@ -54,6 +54,7 @@ export class AdminProductView {
   }
 
   getFormData(): FormData {
+    // 1. Lấy dữ liệu từ các ô input
     const name = (
       document.getElementById("form-prod-name") as HTMLInputElement
     )?.value.trim();
@@ -69,14 +70,26 @@ export class AdminProductView {
     const status = (
       document.getElementById("form-prod-status") as HTMLSelectElement
     )?.value;
+    const stock = (
+      document.getElementById("form-prod-stock") as HTMLInputElement
+    )?.value;
+    const discount = (
+      document.getElementById("form-prod-discount") as HTMLInputElement
+    )?.value;
 
+    // 2. KHAI BÁO formData TRƯỚC (Bắt buộc phải nằm ở đây)
     const formData = new FormData();
-    formData.append("name", name);
+
+    // 3. MỚI BẮT ĐẦU APPEND DỮ LIỆU VÀO
+    formData.append("name", name || "");
     formData.append("category", category || "Workspace");
     formData.append("price", price || "0");
-    formData.append("sku", sku);
+    formData.append("sku", sku || "");
     formData.append("status", status || "Active");
+    formData.append("stock", stock || "0");
+    formData.append("discount", discount || "");
 
+    // 4. Xử lý hình ảnh
     if (this.fileInput && this.fileInput.files) {
       Array.from(this.fileInput.files).forEach((file) => {
         formData.append("images", file);

@@ -20,6 +20,7 @@ export class AuthService {
                 success: true,
                 msg: data.message || "Đăng nhập thành công!",
                 token: data.token,
+                user: data.user,
             };
         }
         catch (error) {

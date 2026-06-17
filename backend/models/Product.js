@@ -12,10 +12,9 @@ const productSchema = new mongoose.Schema(
       required: [true, "Vui lòng nhập tên sản phẩm"],
       trim: true,
     },
-    // Sửa lại thành ObjectId liên kết với bảng Category
+    // ĐÂY NÈ SẾP! NÓ NẰM Ở TRONG BẢNG PRODUCT MỚI ĐÚNG:
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      type: String,
       required: true,
     },
     image: {
@@ -29,6 +28,9 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
       default: 0,
+    },
+    discount: {
+      type: String,
     },
     status: {
       type: String,

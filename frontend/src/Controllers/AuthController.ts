@@ -29,9 +29,18 @@ export class AuthController {
       alert(response.msg);
       // Lưu token và userId vào LocalStorage
       localStorage.setItem("fstyle_token", response.token || "");
-      // Dùng dấu chấm hỏi (?.) để bọc an toàn
       localStorage.setItem("userId", response.user?._id || "");
-      window.location.href = "index.html";
+
+      // LƯU THÊM QUYỀN VÀ BẺ LÁI CHUYỂN TRANG
+      const userRole = response.user?.role || "User";
+      localStorage.setItem("userRole", userRole);
+
+      // Nếu là Admin thì mở cửa vào Dashboard, Khách thì ra trang chủ
+      if (userRole === "Admin" || userRole === "SuperAdmin") {
+        window.location.href = "../admin/admin.html";
+      } else {
+        window.location.href = "index.html";
+      }
     } else {
       alert(response.msg);
     }

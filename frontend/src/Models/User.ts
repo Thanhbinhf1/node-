@@ -11,7 +11,9 @@ export interface AuthResponse {
   token?: string;
   user?: {
     _id: string;
-    name: string;
+    name?: string;
+    fullName?: string; // Đề phòng backend trả về fullName
     email: string;
+    role?: string; // BỔ SUNG DÒNG NÀY ĐỂ HẾT LỖI
   };
 }

@@ -20,13 +20,26 @@ export class HomeView {
         if (!this.hotProductsGrid)
             return;
         this.hotProductsGrid.innerHTML = products
-            .map((p) => `
+            .map((p) => {
+            let imgUrl = "https://dummyimage.com/300x300/cccccc/000000&text=No+Image";
+            if (p.image) {
+                imgUrl = p.image.startsWith("http")
+                    ? p.image
+                    : `http://localhost:3000${p.image}`;
+            }
+            else if (p.images && p.images.length > 0) {
+                const firstImg = p.images[0];
+                imgUrl = firstImg.startsWith("http")
+                    ? firstImg
+                    : `http://localhost:3000${firstImg}`;
+            }
+            return `
             <div class="product-card">
                 ${p.discount ? `<div class="discount-badge">-${p.discount}</div>` : ""}
                 
-<a href="product.html?id=${p.id}">
-    <img src="${p.image || "https://dummyimage.com/300x300/cccccc/000000&text=No+Image"}" class="product-img" alt="${p.name}">
-</a>
+                <a href="product.html?id=${p.id}">
+                    <img src="${imgUrl}" class="product-img" alt="${p.name}">
+                </a>
                 
                 <div class="product-info">
                     <div class="product-name">${p.name}</div>
@@ -52,7 +65,8 @@ export class HomeView {
                     </div>
                 </div>
             </div>
-        `)
+          `;
+        })
             .join("");
     }
 }

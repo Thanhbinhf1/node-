@@ -22,7 +22,14 @@ export class AuthController {
             alert(response.msg);
             localStorage.setItem("fstyle_token", response.token || "");
             localStorage.setItem("userId", response.user?._id || "");
-            window.location.href = "index.html";
+            const userRole = response.user?.role || "User";
+            localStorage.setItem("userRole", userRole);
+            if (userRole === "Admin" || userRole === "SuperAdmin") {
+                window.location.href = "../admin/admin.html";
+            }
+            else {
+                window.location.href = "index.html";
+            }
         }
         else {
             alert(response.msg);

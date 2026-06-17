@@ -52,12 +52,16 @@ export class AdminProductView {
         const price = document.getElementById("form-prod-price")?.value;
         const sku = document.getElementById("form-prod-sku")?.value.trim();
         const status = document.getElementById("form-prod-status")?.value;
+        const stock = document.getElementById("form-prod-stock")?.value;
+        const discount = document.getElementById("form-prod-discount")?.value;
         const formData = new FormData();
-        formData.append("name", name);
+        formData.append("name", name || "");
         formData.append("category", category || "Workspace");
         formData.append("price", price || "0");
-        formData.append("sku", sku);
+        formData.append("sku", sku || "");
         formData.append("status", status || "Active");
+        formData.append("stock", stock || "0");
+        formData.append("discount", discount || "");
         if (this.fileInput && this.fileInput.files) {
             Array.from(this.fileInput.files).forEach((file) => {
                 formData.append("images", file);

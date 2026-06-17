@@ -53,10 +53,8 @@ const userController = {
   updateUser: async (req, res) => {
     try {
       if (!req.body.password) {
-        // Nếu Admin không nhập mật khẩu mới -> xóa field password để không ghi đè mất pass cũ
         delete req.body.password;
       } else {
-        // BƯỚC SỬA LỖI: Nếu Admin nhập mật khẩu mới -> phải mã hóa nó lại
         const salt = await bcrypt.genSalt(10);
         req.body.password = await bcrypt.hash(req.body.password, salt);
       }

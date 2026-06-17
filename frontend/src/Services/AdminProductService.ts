@@ -4,6 +4,7 @@ export class AdminProductService {
   // Trỏ đúng vào cổng 3000 của Node.js sếp đang chạy
   private API_URL = "http://localhost:3000/api/products";
 
+  // ================= 1. LẤY TẤT CẢ SẢN PHẨM =================
   async getAllProducts(): Promise<AdminProduct[]> {
     try {
       const response = await fetch(this.API_URL);
@@ -14,7 +15,6 @@ export class AdminProductService {
         sku: item.sku || "",
         name: item.name || "Sản phẩm chưa có tên",
         category: item.category || "Chưa phân loại",
-        // Chốt chặn thần thánh: Nếu item.price bị undefined thì gán bằng 0
         price: item.price || 0,
         stock: item.stock || 0,
         status:
@@ -31,34 +31,7 @@ export class AdminProductService {
     }
   }
 
-  async deleteProduct(id: string): Promise<boolean> {
-    try {
-      const response = await fetch(`${this.API_URL}/${id}`, {
-        method: "DELETE",
-      });
-      return response.ok;
-    } catch (error) {
-      console.error("Lỗi xóa từ Backend:", error);
-      return false;
-    }
-  }
-
-  async addProduct(formData: FormData): Promise<boolean> {
-    try {
-      const response = await fetch(this.API_URL, {
-        method: "POST",
-        // KHÔNG ĐƯỢC set Content-Type là application/json nữa
-        // Trình duyệt sẽ tự động set Content-Type là multipart/form-data
-        body: formData,
-      });
-      return response.ok;
-    } catch (error) {
-      return false;
-    }
-  }
-  // (Giữ nguyên các hàm getAllProducts, addProduct, deleteProduct cũ của sếp ở đây)
-
-  // Lấy 1 sản phẩm theo ID để bơm vào Form
+  // ================= 2. LẤY 1 SẢN PHẨM THEO ID =================
   async getProductById(id: string): Promise<any> {
     try {
       const response = await fetch(`${this.API_URL}/${id}`);
@@ -70,17 +43,56 @@ export class AdminProductService {
     }
   }
 
-  // Cập nhật sản phẩm
-  async updateProduct(id: string, data: any): Promise<boolean> {
+  // ================= 3. THÊM SẢN PHẨM MỚI =================
+  async addProduct(formData: FormData): Promise<boolean> {
     try {
+      const token = localStorage.getItem("fstyle_token"); // Lấy vé Admin trong bóp ra
+      const response = await fetch(this.API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // Xuất trình vé cho ông verifyAdmin
+        },
+        body: formData, // Gửi nguyên FormData chứa ảnh
+      });
+      return response.ok;
+    } catch (error) {
+      console.error("Lỗi thêm sản phẩm:", error);
+      return false;
+    }
+  }
+
+  // ================= 4. CẬP NHẬT SẢN PHẨM =================
+  async updateProduct(id: string, formData: FormData): Promise<boolean> {
+    try {
+      const token = localStorage.getItem("fstyle_token");
       const response = await fetch(`${this.API_URL}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Tuyệt đối không dùng Content-Type: application/json ở đây vì mình đang gửi ảnh (FormData)
+        },
+        body: formData,
       });
       return response.ok;
     } catch (error) {
       console.error("Lỗi cập nhật sản phẩm:", error);
+      return false;
+    }
+  }
+
+  // ================= 5. XÓA SẢN PHẨM =================
+  async deleteProduct(id: string): Promise<boolean> {
+    try {
+      const token = localStorage.getItem("fstyle_token");
+      const response = await fetch(`${this.API_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.ok;
+    } catch (error) {
+      console.error("Lỗi xóa từ Backend:", error);
       return false;
     }
   }

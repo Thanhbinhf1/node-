@@ -24,19 +24,37 @@ export class HomeView {
       .join("");
   }
 
-  // 2. In Lưới sản phẩm nổi bật
+  // 2. In Lưới sản phẩm nổi bật từ MongoDB
   renderHotProducts(products: Product[]) {
     if (!this.hotProductsGrid) return;
 
     this.hotProductsGrid.innerHTML = products
-      .map(
-        (p) => `
+      .map((p) => {
+        // XỬ LÝ ĐƯỜNG DẪN ẢNH THÔNG MINH CHỐNG GÃY GIAO DIỆN
+        let imgUrl =
+          "https://dummyimage.com/300x300/cccccc/000000&text=No+Image";
+
+        // Kiểm tra nếu có biến image đơn lẻ
+        if (p.image) {
+          imgUrl = p.image.startsWith("http")
+            ? p.image
+            : `http://localhost:3000${p.image}`;
+        }
+        // Nếu không có, check mảng images (số nhiều) bốc tấm đầu tiên lên xài
+        else if ((p as any).images && (p as any).images.length > 0) {
+          const firstImg = (p as any).images[0];
+          imgUrl = firstImg.startsWith("http")
+            ? firstImg
+            : `http://localhost:3000${firstImg}`;
+        }
+
+        return `
             <div class="product-card">
                 ${p.discount ? `<div class="discount-badge">-${p.discount}</div>` : ""}
                 
-<a href="product.html?id=${p.id}">
-    <img src="${p.image || "https://dummyimage.com/300x300/cccccc/000000&text=No+Image"}" class="product-img" alt="${p.name}">
-</a>
+                <a href="product.html?id=${p.id}">
+                    <img src="${imgUrl}" class="product-img" alt="${p.name}">
+                </a>
                 
                 <div class="product-info">
                     <div class="product-name">${p.name}</div>
@@ -62,8 +80,8 @@ export class HomeView {
                     </div>
                 </div>
             </div>
-        `,
-      )
+          `;
+      })
       .join("");
   }
 }
